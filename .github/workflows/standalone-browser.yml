@@ -1,6 +1,16 @@
 name: Standalone browser acceptance
 
 on:
+  pull_request:
+    paths:
+      - "server.js"
+      - "api/**"
+      - "public/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".env.example"
+      - ".github/workflows/standalone-browser.yml"
   workflow_dispatch:
 
 permissions:
