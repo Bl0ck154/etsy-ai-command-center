@@ -246,7 +246,7 @@ function showLoginScreen(requiresUsername = true) {
       <div class="card" style="padding:36px 32px">
         <div style="text-align:center;margin-bottom:28px">
           <div style="width:44px;height:44px;background:var(--orange);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;margin-bottom:14px">E</div>
-          <div style="font-size:18px;font-weight:700;color:var(--text)">EM - Shop Manager Pro</div>
+          <div style="font-size:18px;font-weight:700;color:var(--text)">Etsy AI Command Center</div>
           <div style="font-size:13px;color:var(--text-2);margin-top:3px">Sign in to continue</div>
         </div>
         <form id="login-form" onsubmit="window.__submitLogin(event)" style="display:flex;flex-direction:column;gap:10px">
@@ -261,10 +261,15 @@ function showLoginScreen(requiresUsername = true) {
         </form>
       </div>
     </div>`;
+  const usernameField = document.getElementById('login-username');
+  if (usernameField) usernameField.style.display = requiresUsername ? 'block' : 'none';
   setTimeout(() => document.getElementById(requiresUsername ? 'login-username' : 'login-password')?.focus(), 50);
 }
 
-window.__showLoginScreen = () => showLoginScreen(true);
+window.__showLoginScreen = async () => {
+  const config = await checkAuth();
+  showLoginScreen(config.requires_username !== false);
+};
 
 window.__submitLogin = async (e) => {
   e.preventDefault();
