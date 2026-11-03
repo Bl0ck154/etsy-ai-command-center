@@ -85,7 +85,8 @@ test('external project model is not restored from browser localStorage', () => {
   const settingsSource = fs.readFileSync(path.join(process.cwd(), 'public/pages/settings.js'), 'utf8');
   expect(settingsSource).not.toContain("saveAIModelPref('external'");
   expect(settingsSource).toContain("localStorage.removeItem('ai_model_external')");
-  expect(settingsSource).toContain('codex/gpt-5.6-terra-medium');
+  expect(settingsSource).toContain('value="${DEFAULT_MODELS.external}"');
+  expect(settingsSource).not.toContain('Verified project model');
 });
 
 test('external text and image defaults come from one shared model contract', () => {
