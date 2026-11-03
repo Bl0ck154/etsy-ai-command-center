@@ -114,7 +114,7 @@ test('message automation policy stays draft-only and uses revision checks', asyn
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'etsy-message-policy-'));
   const file = path.join(directory, 'policies.json');
   await withEnv({ MESSAGE_AUTOMATION_POLICY_FILE: file }, async () => {
-    const initial = await loadMessageAutomationPolicy('23207964');
+    const initial = await loadMessageAutomationPolicy('12345678');
     expect(initial).toMatchObject({
       revision: 0,
       policy: {
@@ -124,7 +124,7 @@ test('message automation policy stays draft-only and uses revision checks', asyn
       },
     });
 
-    const saved = await saveMessageAutomationPolicy('23207964', {
+    const saved = await saveMessageAutomationPolicy('12345678', {
       enabled: true,
       delivery_mode: 'automatic_send',
       human_approval_required: false,
@@ -147,7 +147,7 @@ test('message automation policy stays draft-only and uses revision checks', asyn
       delay_minutes: 2,
       cooldown_minutes: 30,
     });
-    await expect(saveMessageAutomationPolicy('23207964', saved.policy, {
+    await expect(saveMessageAutomationPolicy('12345678', saved.policy, {
       expectedRevision: 0,
     })).rejects.toMatchObject({ code: 'MESSAGE_AUTOMATION_REVISION_CONFLICT' });
   });
@@ -237,7 +237,7 @@ test('messages backend saves automation rules and returns live runner status sha
       MESSAGE_TRIGGER_STATE_FILE: path.join(directory, 'trigger-state.json'),
       MESSAGE_AUTO_TRIGGERS_ENABLED: 'true',
       MESSAGE_TRIGGER_RUNNER_ENABLED: 'false',
-      ETSY_SHOP_ID: '23207964',
+      ETSY_SHOP_ID: '12345678',
     }), async () => {
       const saveRes = jsonResponse();
       await messagesHandler(request('POST', {
@@ -389,7 +389,7 @@ test('agent cannot create an order-dependent draft while verified order linking 
   }), async () => {
     await expect(prepareMessageDraftForAgent({
       conversation_id: '9001',
-      shop_id: '23207964',
+      shop_id: '12345678',
       scenario: 'missing_materials',
       body: 'Please send the files.',
     }, 'owner-1', 'request-1')).rejects.toMatchObject({
@@ -422,7 +422,7 @@ test('agent how-to-order draft uses the same exact-listing safety gate', async (
     };
     await expect(prepareMessageDraftForAgent({
       conversation_id: '9001',
-      shop_id: '23207964',
+      shop_id: '12345678',
       scenario: 'how_to_order',
       body: 'Choose the Premium listing for $50.',
     }, 'owner-1', 'request-1', baseDependencies)).rejects.toMatchObject({
@@ -433,7 +433,7 @@ test('agent how-to-order draft uses the same exact-listing safety gate', async (
     let posted;
     const safe = await prepareMessageDraftForAgent({
       conversation_id: '9001',
-      shop_id: '23207964',
+      shop_id: '12345678',
       scenario: 'how_to_order',
       body: 'Which product and number of people would you like to order?',
     }, 'owner-1', 'request-2', {
@@ -467,11 +467,11 @@ test('playbook persistence normalizes immutable scenario safety and rejects stal
   const file = path.join(directory, 'playbooks.json');
   try {
     await withEnv({ MESSAGE_PLAYBOOK_FILE: file }, async () => {
-      const initial = await loadMessagePlaybook('23207964');
+      const initial = await loadMessagePlaybook('12345678');
       expect(initial.revision).toBe(0);
       expect(initial.playbook.scenarios.review_request.enabled).toBe(false);
 
-      const saved = await saveMessagePlaybook('23207964', {
+      const saved = await saveMessagePlaybook('12345678', {
         tone: { summary: 'Friendly and direct.' },
         hard_rules: ['Use verified facts only.'],
         avoid_phrases: ['guaranteed'],
@@ -498,11 +498,11 @@ test('playbook persistence normalizes immutable scenario safety and rejects stal
       expect(saved.playbook.examples).toHaveLength(1);
 
       const persisted = JSON.parse(fs.readFileSync(file, 'utf8'));
-      expect(persisted.shops['23207964'].playbook.tone.summary).toBe(
+      expect(persisted.shops['12345678'].playbook.tone.summary).toBe(
         'Friendly and direct.',
       );
 
-      await expect(saveMessagePlaybook('23207964', saved.playbook, {
+      await expect(saveMessagePlaybook('12345678', saved.playbook, {
         expectedRevision: 0,
         updatedBy: 'stale-editor',
       })).rejects.toMatchObject({
@@ -560,7 +560,7 @@ test('reserve account blocks order-dependent live drafts before conversation or 
     }), async () => {
       const req = request('POST', {
         action: 'generateDraft',
-        shop_id: '23207964',
+        shop_id: '12345678',
         conversation_id: '1250240141',
         scenario: 'missing_materials',
       });
@@ -585,7 +585,7 @@ test('agent file guidance requires one exact verified paid Etsy order', async ()
   }), async () => {
     const baseInput = {
       conversation_id: '9001',
-      shop_id: '23207964',
+      shop_id: '12345678',
       scenario: 'how_to_send_files',
       source_message_id: 'buyer-files-1',
       body: 'Hi, yes, you can attach the photos here in this Etsy conversation.',
@@ -701,7 +701,7 @@ test('conversation preview refreshes the exact thread and returns no-action with
 
   try {
     await withEnv(developmentBridgeEnv({
-      ETSY_SHOP_ID: '23207964',
+      ETSY_SHOP_ID: '12345678',
       MESSAGE_PLAYBOOK_FILE: playbookFile,
     }), async () => {
       const res = jsonResponse();
@@ -826,7 +826,7 @@ test('manual freeform draft is allowed on reserve account but only enters approv
     await withEnv(developmentBridgeEnv(), async () => {
       const req = request('POST', {
         action: 'createManualDraft',
-        shop_id: '23207964',
+        shop_id: '12345678',
         conversation_id: '1250240141',
         scenario: 'freeform',
         body: 'Thanks for your message.',
@@ -1384,7 +1384,7 @@ test('operator skip and block actions reconcile matching trigger candidates', as
     rule_id: 'rule-1',
     event: 'new_message',
     scenario: 'freeform',
-    shop_id: '23207964',
+    shop_id: '12345678',
     conversation_id: '1250240141',
     status: 'AWAITING_APPROVAL',
     due_at: '2026-07-28T08:00:00.000Z',
@@ -1481,7 +1481,7 @@ test('successful Bridge action remains successful when trigger reconciliation fa
         rule_id: 'rule-1',
         event: 'new_message',
         scenario: 'freeform',
-        shop_id: '23207964',
+        shop_id: '12345678',
         conversation_id: '1250240141',
         status: 'AWAITING_APPROVAL',
         draft_id: '83',

@@ -114,13 +114,13 @@ test('uploadImageFromUrl downloads from Etsy CDN then reuses the Etsy multipart 
   const data = await uploadImageAction({
     action: 'uploadImageFromUrl',
     listing_id: '4540996015',
-    imageUrl: 'https://i.etsystatic.com/23207964/r/il/example/cover.png',
+    imageUrl: 'https://i.etsystatic.com/12345678/r/il/example/cover.png',
     rank: 2,
     overwrite: false,
     alt_text: 'Personalized family portrait product preview',
   }, {
     token: 'etsy-access-token',
-    shopId: '23207964',
+    shopId: '12345678',
     remoteFetchImpl: async () => new Response(PNG_BYTES, {
       status: 200,
       headers: { 'Content-Type': 'image/png', 'Content-Length': String(PNG_BYTES.length) },
@@ -135,7 +135,7 @@ test('uploadImageFromUrl downloads from Etsy CDN then reuses the Etsy multipart 
   });
 
   expect(data).toEqual({ listing_image_id: 777 });
-  expect(uploadRequest.url).toBe('https://openapi.etsy.com/v3/application/shops/23207964/listings/4540996015/images');
+  expect(uploadRequest.url).toBe('https://openapi.etsy.com/v3/application/shops/12345678/listings/4540996015/images');
   expect(uploadRequest.options.method).toBe('POST');
   expect(uploadRequest.options.headers.Authorization).toBe('Bearer etsy-access-token');
   expect(uploadRequest.options.headers['Content-Type']).toContain('multipart/form-data; boundary=');
@@ -157,7 +157,7 @@ test('URL upload action rejects non-Etsy sources before any network request', as
     imageUrl: 'https://127.0.0.1/internal.png',
   }, {
     token: 'etsy-access-token',
-    shopId: '23207964',
+    shopId: '12345678',
     remoteFetchImpl: async () => { requested = true; },
   })).rejects.toMatchObject({ status: 400 });
   expect(requested).toBe(false);

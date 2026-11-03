@@ -8,7 +8,7 @@ This document is the status of the **public source preview**, not a claim that t
 | Initial privacy cleanup | Sanitized source, examples and deployment exclusion | Point-in-time audit completed; continue monitoring |
 | Feature architecture | Manual UI, AI tools and social orchestration exist | Code present, not universal runtime validation |
 | Source syntax and privacy guard | Automated checks | CI gate |
-| Clean `npm ci` using Node 22 | Hosted CI compatibility gate | Under verification |
+| Clean `npm ci` using Node 22 | GitHub Actions on Node 22 | Passed for Ubuntu; other platforms unverified |
 | Unit / offline tests | 63 selected tests passed on Node 22 in GitHub Actions on 2026-11-03 | Partial coverage only; full suite unverified |
 | Local startup without secrets | GitHub Actions Node 22, no Etsy tokens, `/healthz` | Passed for a basic boot check |
 | Etsy OAuth and live writes | Credentials and a permitted shop required | Not validated for outside users |
@@ -34,3 +34,9 @@ This document is the status of the **public source preview**, not a claim that t
 The public source snapshot intentionally excludes original deployment files, runtime data and the independently hosted Messages Bridge. The public demo is static and deliberately has no Etsy connectivity. Some optional paths still expect compatible external infrastructure. A source check only confirms syntax and repository hygiene, not a functioning installation.
 
 See [quick start](QUICKSTART.md), [integrations](INTEGRATIONS.md), [limitations](LIMITATIONS.md) and [roadmap](ROADMAP.md).
+
+## Portability updates
+
+- Optional Etsy API Hub no longer silently defaults to a private server path.
+- Added a redacted configuration doctor and dedicated Etsy OAuth/KV, AI, deployment and configuration guides.
+- Removed private deployment-only tests; the full public unit suite still requires verification.

@@ -453,11 +453,11 @@ test.describe('format helpers', () => {
 
 test.describe('shop parsing helpers', () => {
   test('parseShopsFromEnv parses ETSY_SHOP_IDS', async () => {
-    process.env.ETSY_SHOP_IDS = '23207964:Main Shop,45678901:Second Shop';
+    process.env.ETSY_SHOP_IDS = '12345678:Main Shop,45678901:Second Shop';
     delete process.env.ETSY_SHOP_ID;
     const mod = await import(`../api/_shops.js?ts=${Date.now()}`);
     const shops = mod.parseShopsFromEnv();
-    expect(shops[0].id).toBe('23207964');
+    expect(shops[0].id).toBe('12345678');
     expect(shops[0].name).toBe('Main Shop');
     expect(shops[1].id).toBe('45678901');
   });

@@ -1,6 +1,6 @@
 {
   "name": "etsy-ai-command-center",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Self-hosted Etsy seller dashboard with an actionable AI assistant, listing management, media workflows and human-approved automations",
   "type": "module",
   "engines": {
@@ -25,7 +25,9 @@
     "test:unit:full": "playwright test --config=playwright.unit.config.js",
     "check": "node --check server.js && node --check api/agent.js && node --check api/social.js && node --check public/app.js",
     "verify:source": "node scripts/verify-runtime-syntax.mjs && node scripts/verify-public-release.mjs",
-    "check:public": "node scripts/verify-public-release.mjs"
+    "check:public": "node scripts/verify-public-release.mjs",
+    "doctor": "node scripts/config-doctor.mjs",
+    "test:unit:public": "playwright test --config=playwright.unit.config.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2"

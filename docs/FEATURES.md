@@ -23,3 +23,7 @@ A companion Etsy Messages Bridge handles browser-side conversation synchronizati
 The public source includes opportunity selection, creative planning, media generation, media quality checks, owner-review data and publish-readiness logic. A complete autonomous owner-review producer is not included or enabled in this public repository. Manual social interfaces and orchestration code are included for development.
 
 For up-to-date availability and production cautions, see `LIMITATIONS.md`.
+
+## Installation boundary
+
+The dashboard can start without live Etsy credentials. OAuth token exchange and refresh require a separately configured Redis REST backend. Etsy API Hub and Messages Bridge are independent, optional services. See [Configuration](CONFIGURATION.md).

@@ -12,7 +12,7 @@ import {
 } from '../api/messages/learning-feedback-repository.js';
 
 const helper = fileURLToPath(new URL('./support/message-learning-process.mjs', import.meta.url));
-const shopId = '23207964';
+const shopId = '12345678';
 
 function testEnvironment() {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'message-learning-'));

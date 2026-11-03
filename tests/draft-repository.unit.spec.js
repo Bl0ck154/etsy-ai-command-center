@@ -31,7 +31,7 @@ async function withTempDirectory(operation) {
 }
 
 const identity = Object.freeze({
-  shopId: '23207964',
+  shopId: '12345678',
   userId: 'owner',
   key: 'create_draft',
 });
@@ -39,7 +39,7 @@ const identity = Object.freeze({
 function record(value) {
   return {
     key: 'create_draft',
-    shop_id: '23207964',
+    shop_id: '12345678',
     user_id: 'owner',
     updated_at: value.serverSavedAt,
     value,
@@ -59,7 +59,7 @@ test('draft repository stores a versioned record without leaking the wrapper on 
     await repository.mutate(identity, context => context.write(expected));
 
     const persisted = JSON.parse(await fs.readFile(
-      path.join(directory, '23207964-owner-create_draft.json'),
+      path.join(directory, '12345678-owner-create_draft.json'),
       'utf8',
     ));
     expect(persisted).toEqual({
@@ -80,7 +80,7 @@ test('legacy unwrapped records are read and migrated to the explicit schema', as
       savedAt: 41,
       serverSavedAt: 41,
     });
-    const file = path.join(directory, '23207964-owner-create_draft.json');
+    const file = path.join(directory, '12345678-owner-create_draft.json');
     await fs.writeFile(file, `${JSON.stringify(legacy, null, 2)}\n`);
     const repository = createDraftRepository({ directory });
 
@@ -102,14 +102,14 @@ test('legacy shop-only filenames move to the user scope and migrate once', async
       savedAt: 52,
       serverSavedAt: 52,
     });
-    const legacyFile = path.join(directory, '23207964-create_draft.json');
+    const legacyFile = path.join(directory, '12345678-create_draft.json');
     await fs.writeFile(legacyFile, `${JSON.stringify(legacy, null, 2)}\n`);
     const repository = createDraftRepository({ directory });
 
     await expect(repository.read(identity)).resolves.toEqual(legacy);
     await expect(fs.stat(legacyFile)).rejects.toMatchObject({ code: 'ENOENT' });
     const migrated = JSON.parse(await fs.readFile(
-      path.join(directory, '23207964-owner-create_draft.json'),
+      path.join(directory, '12345678-owner-create_draft.json'),
       'utf8',
     ));
     expect(migrated).toMatchObject({
@@ -156,7 +156,7 @@ test('two writer processes cannot both commit the same expected revision', async
         lockTtlMs: 30,
         lockWaitMs: 2000,
       });
-      const identity = { shopId: '23207964', userId: 'owner', key: 'create_draft' };
+      const identity = { shopId: '12345678', userId: 'owner', key: 'create_draft' };
       const result = await repository.mutate(identity, async context => {
         if (Number(context.value?.revision || 0) !== 10) {
           return { committed: false, current_revision: Number(context.value?.revision || 0) };
@@ -164,7 +164,7 @@ test('two writer processes cannot both commit the same expected revision', async
         await new Promise(resolve => setTimeout(resolve, 100));
         await context.write({
           key: 'create_draft',
-          shop_id: '23207964',
+          shop_id: '12345678',
           user_id: 'owner',
           updated_at: 11,
           value: { title: process.env.TEST_WRITER, revision: 11, serverSavedAt: 11 },
@@ -220,10 +220,10 @@ test('a process crash before rename preserves the prior draft and stale lock is 
         },
       });
       await repository.mutate(
-        { shopId: '23207964', userId: 'owner', key: 'create_draft' },
+        { shopId: '12345678', userId: 'owner', key: 'create_draft' },
         context => context.write({
           key: 'create_draft',
-          shop_id: '23207964',
+          shop_id: '12345678',
           user_id: 'owner',
           updated_at: 21,
           value: { title: 'Crashing draft', revision: 21, serverSavedAt: 21 },

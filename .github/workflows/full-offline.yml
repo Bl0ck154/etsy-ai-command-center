@@ -1,0 +1,32 @@
+name: Full offline unit audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      NODE_ENV: test
+      AUTOPUBLISH_ENABLED: "false"
+      AUTOPUBLISH: "false"
+      REAL_PUBLISH_RELEASE_APPROVED: "false"
+      MESSAGE_AUTO_TRIGGERS_ENABLED: "false"
+      MESSAGE_TRIGGER_RUNNER_ENABLED: "false"
+      SOCIAL_AUTOPUBLISH_OWNER_OPT_IN: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Verify public source
+        run: npm run verify:source
+      - name: Audit full standalone unit suite
+        run: npx playwright test --config=playwright.unit.config.js --max-failures=25

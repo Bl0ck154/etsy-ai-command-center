@@ -130,7 +130,7 @@ test('proposal recovery conflicts never suppress a confirmed delivery outcome', 
     }),
   });
   const result = await app.recordDeliveryOutcome({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '44',
     outcome: 'SENT',
     finalBody: 'Manager final',

@@ -82,7 +82,8 @@ git clone https://github.com/Bl0ck154/etsy-ai-command-center.git
 cd etsy-ai-command-center
 npm ci
 cp .env.example .env
-# Edit .env with your own session secret, password and any needed API credentials.
+# Edit .env with your own credentials and unique session secret.
+npm run doctor
 npm start
 ```
 
@@ -91,7 +92,7 @@ The example sets `PORT=3010`. Open **http://localhost:3010** after the server st
 > [!NOTE]
 > This is a source installation, not a hosted Etsy app or ready-made OAuth integration. Messages Bridge, social providers and shared storage must be set up separately when needed. An accessible UI does not imply every integration is configured.
 
-[Detailed quick start](docs/QUICKSTART.md) · [External integrations](docs/INTEGRATIONS.md)
+[Detailed quick start](docs/QUICKSTART.md) · [Etsy OAuth](docs/ETSY-OAUTH.md) · [Configuration](docs/CONFIGURATION.md) · [External integrations](docs/INTEGRATIONS.md)
 
 ## AI that keeps the seller in control
 
@@ -116,11 +117,12 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Autonomous Social producer | Not bundled |
 | Production readiness | **Not declared** |
 
-[Release-readiness audit](docs/RELEASE-READINESS.md) · [Known limitations](docs/LIMITATIONS.md) · [FAQ](docs/FAQ.md) · [Roadmap](docs/ROADMAP.md)
+[Release-readiness audit](docs/RELEASE-READINESS.md) · [Deployment](docs/DEPLOYMENT.md) · [AI providers](docs/AI-PROVIDERS.md) · [Known limitations](docs/LIMITATIONS.md) · [FAQ](docs/FAQ.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Development
 
 ```bash
+npm run doctor           # redacted configuration preflight
 npm run check            # quick syntax checks
 npm run verify:source    # full source syntax and public-snapshot safety checks
 npm run test:unit        # offline unit tests (requires installed dependencies)

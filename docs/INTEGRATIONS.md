@@ -14,3 +14,5 @@ All integrations are supplied by the operator. This repository does not ship rea
 The private operational scripts, production host addresses and the original autonomous Social producer were deliberately excluded from this public snapshot.
 
 Do not enable unofficial browser automation without checking the relevant platform rules and legal obligations.
+
+See [Configuration](CONFIGURATION.md), [Etsy OAuth](ETSY-OAUTH.md), [AI providers](AI-PROVIDERS.md) and [Deployment](DEPLOYMENT.md) for concrete prerequisites and feature boundaries.

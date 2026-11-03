@@ -110,7 +110,7 @@ function newMessageEvent(overrides = {}) {
   return {
     event_id: 'mail-evt-1',
     type: 'new_message',
-    shop_id: '23207964',
+    shop_id: '12345678',
     conversation_id: '1250240141',
     source_message_id: 'message-9001',
     occurred_at: '2026-07-28T08:00:00.000Z',
@@ -887,7 +887,7 @@ test('email-style hydration skips a buyer message already followed by a shop rep
     let reconciliation = null;
     const hydrate = dependencies => hydrateNewMessageTriggerEvent({
       event_id: dependencies.eventId,
-      shop_id: '23207964',
+      shop_id: '12345678',
       conversation_id: '1250240141',
       occurred_at: '2026-07-28T08:02:00.000Z',
       source: 'gmail_notification',
@@ -927,7 +927,7 @@ test('email-style hydration skips a buyer message already followed by a shop rep
     });
     expect(syncCalls).toBe(1);
     expect(reconciliation).toMatchObject({
-      shopId: '23207964',
+      shopId: '12345678',
       conversationId: '1250240141',
       conversation: { source_id: '1250240141' },
     });
@@ -939,7 +939,7 @@ test('email-style hydration uses newest unanswered incoming and deduplicates it'
     let syncCalls = 0;
     const hydrate = eventId => hydrateNewMessageTriggerEvent({
       event_id: eventId,
-      shop_id: '23207964',
+      shop_id: '12345678',
       conversation_id: '1250240141',
       occurred_at: '2026-07-28T08:02:00.000Z',
       source: 'gmail_notification',
@@ -981,7 +981,7 @@ test('email-style hydration fails closed for newer unknown direction', async () 
   await withTriggerEnv(async () => {
     const result = await hydrateNewMessageTriggerEvent({
       event_id: 'gmail-unknown-direction',
-      shop_id: '23207964',
+      shop_id: '12345678',
       conversation_id: '1250240141',
     }, {
       syncConversation: async () => {},
@@ -1011,7 +1011,7 @@ test('email-style hydration rejects incoming direction with seller sender', asyn
   await withTriggerEnv(async () => {
     const result = await hydrateNewMessageTriggerEvent({
       event_id: 'gmail-inconsistent-sender',
-      shop_id: '23207964',
+      shop_id: '12345678',
       conversation_id: '1250240141',
     }, {
       syncConversation: async () => {},
@@ -1174,7 +1174,7 @@ test('order lifecycle event resolves conversation only through an exact Bridge r
   const hydrated = await hydrateOrderLinkedTriggerEvent({
     event_id: 'order-paid-555001',
     type: 'order_paid',
-    shop_id: '23207964',
+    shop_id: '12345678',
     receipt_id: '555001',
     occurred_at: '2026-07-28T08:00:00.000Z',
   }, {
@@ -1200,7 +1200,7 @@ test('order lifecycle event resolves conversation only through an exact Bridge r
   const emailHydrated = await hydrateOrderLinkedTriggerEvent({
     event_id: 'order-paid-email-555001',
     type: 'order_paid',
-    shop_id: '23207964',
+    shop_id: '12345678',
     receipt_id: '555001',
     conversation_id: '1250240141',
     occurred_at: '2026-07-28T08:00:00.000Z',
@@ -1226,7 +1226,7 @@ test('order lifecycle event resolves conversation only through an exact Bridge r
 
   await expect(hydrateOrderLinkedTriggerEvent({
     type: 'order_paid',
-    shop_id: '23207964',
+    shop_id: '12345678',
     receipt_id: '555001',
     conversation_id: '9999999999',
   }, {
@@ -1242,7 +1242,7 @@ test('order lifecycle event resolves conversation only through an exact Bridge r
 
   await expect(hydrateOrderLinkedTriggerEvent({
     type: 'order_paid',
-    shop_id: '23207964',
+    shop_id: '12345678',
     receipt_id: '555001',
   }, {
     lookupOrderLink: async () => ({
@@ -1391,7 +1391,7 @@ test('event endpoint accepts the Gmail relay ingestNotification payload alias', 
         action: 'ingestNotification',
         event_id: 'gmail-relay-1',
         type: 'new_message',
-        shop_id: '23207964',
+        shop_id: '12345678',
         conversation_id: '1250240141',
         source_message_id: 'message-9001',
         occurred_at: '2026-07-28T08:00:00.000Z',
@@ -1428,7 +1428,7 @@ test('order event without an Etsy conversation returns a bounded identity retry 
         action: 'ingestNotification',
         event_id: 'order-no-conversation-1',
         type: 'order_paid',
-        shop_id: '23207964',
+        shop_id: '12345678',
         receipt_id: '555001',
         occurred_at: '2026-07-28T08:00:00.000Z',
         process_due: false,
@@ -1834,7 +1834,7 @@ test('skip and block draft reconciliation use explicit terminal statuses', async
       rule_id: 'rule-1',
       event: 'new_message',
       scenario: 'freeform',
-      shop_id: '23207964',
+      shop_id: '12345678',
       conversation_id: '1250240141',
       status: 'AWAITING_APPROVAL',
       due_at: '2026-07-28T08:00:00.000Z',
@@ -2244,7 +2244,7 @@ test('draft reconciliation rejects an unexpected Bridge terminal status without 
           rule_id: 'rule-1',
           event: 'new_message',
           scenario: 'freeform',
-          shop_id: '23207964',
+          shop_id: '12345678',
           conversation_id: '1250240141',
           status: 'AWAITING_APPROVAL',
           draft_id: '92',

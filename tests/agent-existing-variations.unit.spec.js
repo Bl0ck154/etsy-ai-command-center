@@ -19,12 +19,12 @@ test.describe('existing Etsy listing variation contract', () => {
       };
     };
 
-    const result = await fetchShopFulfillmentProfiles(fetcher, '23207964');
+    const result = await fetchShopFulfillmentProfiles(fetcher, '12345678');
 
     expect(TOOLS.find(tool => tool.name === 'get_shop_fulfillment_profiles')).toBeTruthy();
     expect(calls).toEqual([
-      '/shops/23207964/shipping-profiles',
-      '/shops/23207964/readiness-state-definitions?limit=100',
+      '/shops/12345678/shipping-profiles',
+      '/shops/12345678/readiness-state-definitions?limit=100',
     ]);
     expect(result).toEqual({
       shipping_profiles: [{ id: 701, title: 'Digital service delivery', origin_country: 'US' }],

@@ -55,9 +55,3 @@ test('failed refund does not close an otherwise paid order', () => {
 
   expect(receiptLifecycle(receipt)).toMatchObject({ key: 'paid', isOpen: true, canShip: true });
 });
-
-test('VPS deploy automatically includes newly tracked API and public modules', () => {
-  const deploy = fs.readFileSync(new URL('../scripts/deploy-vps-staging.sh', import.meta.url), 'utf8');
-  expect(deploy).toContain('git -C "$SOURCE_DIR" ls-files -- api public');
-  expect(deploy).toContain('FILES+=("$rel")');
-});

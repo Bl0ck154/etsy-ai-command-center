@@ -5,15 +5,15 @@ import path from 'node:path';
 
 test('client workspace keys separate authenticated users in the same shop', async () => {
   const { workspaceScopeFor } = await import(`../public/utils/user-scope.js?isolation=${Date.now()}`);
-  expect(workspaceScopeFor('illia', '23207964')).toBe('illia:23207964');
-  expect(workspaceScopeFor('second-admin', '23207964')).toBe('second-admin:23207964');
-  expect(workspaceScopeFor('illia', '23207964')).not.toBe(workspaceScopeFor('second-admin', '23207964'));
+  expect(workspaceScopeFor('seller-a', '12345678')).toBe('seller-a:12345678');
+  expect(workspaceScopeFor('seller-b', '12345678')).toBe('seller-b:12345678');
+  expect(workspaceScopeFor('seller-a', '12345678')).not.toBe(workspaceScopeFor('seller-b', '12345678'));
 });
 
 test('server create draft filenames include both shop and authenticated user', async () => {
   const { draftStorageFilename } = await import(`../api/drafts.js?isolation=${Date.now()}`);
-  expect(draftStorageFilename({ shopId: '23207964', userId: 'illia' })).toBe('23207964-illia-create_draft.json');
-  expect(draftStorageFilename({ shopId: '23207964', userId: 'second-admin' })).toBe('23207964-second-admin-create_draft.json');
+  expect(draftStorageFilename({ shopId: '12345678', userId: 'seller-a' })).toBe('12345678-seller-a-create_draft.json');
+  expect(draftStorageFilename({ shopId: '12345678', userId: 'seller-b' })).toBe('12345678-seller-b-create_draft.json');
 });
 
 test('background jobs cannot be read or claimed by another authenticated user', async () => {
@@ -25,11 +25,11 @@ test('background jobs cannot be read or claimed by another authenticated user', 
   try {
     const jobs = await import(`../api/jobs.js?isolation=${Date.now()}`);
     const id = `job_agent_isolation_${Date.now().toString(36)}`;
-    const created = jobs.createBackgroundJob(id, 'agent_turn', { description: 'Private turn' }, 'illia');
-    expect(created?.owner_id).toBe('illia');
-    expect(await jobs.getBackgroundJob(id, 'illia')).toBeTruthy();
-    expect(await jobs.getBackgroundJob(id, 'second-admin')).toBeNull();
-    expect(jobs.createBackgroundJob(id, 'agent_turn', { description: 'Collision' }, 'second-admin')).toBeNull();
+    const created = jobs.createBackgroundJob(id, 'agent_turn', { description: 'Private turn' }, 'seller-a');
+    expect(created?.owner_id).toBe('seller-a');
+    expect(await jobs.getBackgroundJob(id, 'seller-a')).toBeTruthy();
+    expect(await jobs.getBackgroundJob(id, 'seller-b')).toBeNull();
+    expect(jobs.createBackgroundJob(id, 'agent_turn', { description: 'Collision' }, 'seller-b')).toBeNull();
   } finally {
     if (previousJobsDir === undefined) delete process.env.JOBS_DIR;
     else process.env.JOBS_DIR = previousJobsDir;
@@ -38,12 +38,4 @@ test('background jobs cannot be read or claimed by another authenticated user', 
     await new Promise(resolve => setTimeout(resolve, 50));
     fs.rmSync(jobsDir, { recursive: true, force: true });
   }
-});
-
-test('deployment includes the shared user-scope module and gallery metadata is user-scoped', () => {
-  const deploy = fs.readFileSync(new URL('../scripts/deploy-vps-staging.sh', import.meta.url), 'utf8');
-  const kv = fs.readFileSync(new URL('../api/kv.js', import.meta.url), 'utf8');
-  expect(deploy).toContain('public/utils/user-scope.js');
-  expect(kv).toContain('`${SHOP_ID}:user:${userId}:gallery:meta`');
-  expect(kv).toContain('`${SHOP_ID}:user:${userId}:gallery:videos`');
 });

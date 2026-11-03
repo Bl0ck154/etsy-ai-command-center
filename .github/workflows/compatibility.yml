@@ -24,9 +24,11 @@ jobs:
       - name: Clean dependency install
         run: npm ci --no-audit --no-fund
       - name: Quick checks
-        run: npm run check
+        run: npm run verify:source
+      - name: Redacted configuration preflight
+        run: npm run doctor
       - name: Offline regression tests
-        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js tests/stats-bootstrap.unit.spec.js tests/gpt-router-contract.unit.spec.js tests/social-generate-media.unit.spec.js tests/messages-draft-delivery-application.unit.spec.js tests/etsy-oauth-client.unit.spec.js tests/agent-vision-dependencies.unit.spec.js tests/message-learning-flow.unit.spec.js
+        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js tests/stats-bootstrap.unit.spec.js tests/public-hub-configuration.unit.spec.js tests/public-config-doctor.unit.spec.js tests/gpt-router-contract.unit.spec.js tests/social-generate-media.unit.spec.js tests/messages-draft-delivery-application.unit.spec.js tests/etsy-oauth-client.unit.spec.js tests/agent-vision-dependencies.unit.spec.js tests/message-learning-flow.unit.spec.js
       - name: Unconfigured localhost boot and health
         run: |
           PORT=3010 HOST=127.0.0.1 NODE_ENV=development node server.js > /tmp/etsy-public-startup.log 2>&1 &

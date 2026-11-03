@@ -21,13 +21,14 @@ cp .env.example .env
 
 Edit `.env`. Set a unique, long `SITE_PASSWORD` and a freshly generated random `SESSION_SECRET`. Do not reuse the placeholders from `.env.example`.
 
-Set `ETSY_API_KEY` and your shop's authorization details to use live Etsy operations. Etsy access tokens must belong to an authorized shop/account. Configure the relevant OAuth callback URLs according to your approved Etsy application.
+Before choosing Connect Etsy, configure the required Redis REST token store: KV_REST_API_URL and KV_REST_API_TOKEN. Then set your own ETSY_API_KEY, ETSY_CLIENT_SECRET and ETSY_SHOP_ID. Read [Etsy OAuth](ETSY-OAUTH.md) for approved app access, callback matching and PKCE.
 
-Optionally configure `GEMINI_API_KEY`, `ANTHROPIC_API_KEY`, or an OpenAI-compatible external AI endpoint. Exact image adapter and tool-calling support differ by provider and model.
+AI is optional. Configure Gemini, Claude or an explicitly compatible external model when needed. Tool calling, vision and image generation are distinct capabilities; read [AI providers](AI-PROVIDERS.md). The external Etsy API Hub is off by default.
 
 ## Start
 
 ```bash
+npm run doctor
 npm run check
 npm start
 ```
@@ -52,3 +53,9 @@ If the application reports missing configuration, supply the corresponding crede
 ## Troubleshooting
 
 Some advanced pages depend on separately deployed infrastructure such as a shared KV backend, an Etsy Messages Bridge, or social-media providers. These are optional integrations and are not packaged as turn-key services. See `INTEGRATIONS.md` and `LIMITATIONS.md`.
+
+## More setup guidance
+
+- [Configuration reference](CONFIGURATION.md)
+- [Deployment, backup and upgrades](DEPLOYMENT.md)
+- [Release readiness](RELEASE-READINESS.md)
