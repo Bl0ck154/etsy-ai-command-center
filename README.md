@@ -107,14 +107,14 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | --- | --- |
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
-| Clean install / dependency compatibility | **Node 22 @ GitHub Actions passed**; other environments untested |
+| Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
 | Full unit and browser test suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |
 | Autonomous Social producer | Not bundled |
 | Production readiness | **Not declared** |
 
-[Release-readiness audit](docs/RELEASE-READINESS.md) · [Known limitations](docs/LIMITATIONS.md) · [Roadmap](docs/ROADMAP.md)
+[Release-readiness audit](docs/RELEASE-READINESS.md) · [Known limitations](docs/LIMITATIONS.md) · [FAQ](docs/FAQ.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Development
 
@@ -128,7 +128,7 @@ Code is split across `api/` (backend and orchestration), `public/` (web UI), `wo
 
 ## Contribute and support
 
-Bug reports and focused pull requests are welcome. Please use **synthetic listings, redacted screenshots and no customer data** in issues. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+Bug reports and focused pull requests are welcome. Please use **synthetic listings, redacted screenshots and no customer data** in issues. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). [Sharing kit](docs/SHARING.md) includes a concise project description and relevant hashtags.
 
 If you find the project useful, a GitHub star helps other Etsy sellers discover it. ⭐
 

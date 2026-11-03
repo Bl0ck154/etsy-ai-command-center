@@ -8,7 +8,8 @@ Prioritize outside-user reliability over adding feature count.
 - [x] Independent README, setup guide, sample config and license
 - [x] Synthetic, clearly labeled interface illustrations
 - [x] Confirm Node 22 dependency installation on a clean hosted runner
-- [ ] Confirm no-credentials bootstrap and startup
+- [x] Confirm no-credentials localhost startup and health check (Node 22)
+- [ ] Check each unconfigured UI route for usable fallback states
 - [ ] Keep offline tests green and meaningful in CI
 - [ ] Remove hidden assumptions about private server services and file paths
 

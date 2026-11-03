@@ -1,6 +1,6 @@
 {
   "name": "etsy-ai-command-center",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Self-hosted Etsy seller dashboard with an actionable AI assistant, listing management, media workflows and human-approved automations",
   "type": "module",
   "engines": {
