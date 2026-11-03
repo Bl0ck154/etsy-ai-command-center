@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml"><img alt="Source checks" src="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/Bl0ck154/etsy-ai-command-center/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/Bl0ck154/etsy-ai-command-center?include_prereleases&label=release"></a>
+  <a href="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/compatibility.yml"><img alt="Clean install and offline smoke checks" src="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/compatibility.yml/badge.svg?event=workflow_dispatch"></a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-377d57"></a>
   <a href="https://github.com/Bl0ck154/etsy-ai-command-center/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Bl0ck154/etsy-ai-command-center?style=flat"></a>
   <img alt="Node.js 22+" src="https://img.shields.io/badge/Node.js-22%2B-43853d">
@@ -108,6 +109,7 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
 | Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
+| Hosted offline smoke | **63 selected tests passed** on Node 22 |
 | Full unit and browser test suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |

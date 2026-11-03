@@ -9,7 +9,7 @@ This document is the status of the **public source preview**, not a claim that t
 | Feature architecture | Manual UI, AI tools and social orchestration exist | Code present, not universal runtime validation |
 | Source syntax and privacy guard | Automated checks | CI gate |
 | Clean `npm ci` using Node 22 | Hosted CI compatibility gate | Under verification |
-| Unit / offline tests | Public smoke subset has 16 tests; full suite still unverified | Partial coverage only |
+| Unit / offline tests | 63 selected tests passed on Node 22 in GitHub Actions on 2026-11-03 | Partial coverage only; full suite unverified |
 | Local startup without secrets | GitHub Actions Node 22, no Etsy tokens, `/healthz` | Passed for a basic boot check |
 | Etsy OAuth and live writes | Credentials and a permitted shop required | Not validated for outside users |
 | Customer messages | Requires a separately deployed Bridge | Not bundled |

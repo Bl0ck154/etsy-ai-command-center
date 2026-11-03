@@ -27,3 +27,7 @@ Etsy seller dashboard, Etsy shop manager, Etsy AI assistant, Etsy AI copilot, Et
 #Etsy #EtsySeller #EtsyTools #EtsyAI #OpenSource #SelfHosted #AIAgents
 
 GitHub discovery primarily uses the repository name, description, README and Topics; hashtags here are for external social posts. Follow each community's self-promotion rules and avoid making unsupported production-readiness claims.
+
+## GitHub social preview
+
+Prepared artwork: [1280×640 PNG](assets/social-preview.png) (synthetic illustration, under 1 MB). GitHub currently requires uploading a repository social preview through **Settings → General → Social preview → Edit → Upload an image**. Keeping the PNG in Git does not automatically apply that setting.
