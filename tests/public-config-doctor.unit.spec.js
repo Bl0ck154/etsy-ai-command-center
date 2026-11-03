@@ -14,7 +14,7 @@ function runDoctor(extraConfig) {
       env: {
         PATH: process.env.PATH,
         HOME: process.env.HOME,
-        NODE_ENV: 'development',
+        NODE_ENV: extraConfig.includes('NODE_ENV=production') ? 'production' : 'development',
         CONFIG_DOCTOR_ENV_FILE: file,
       },
       encoding: 'utf8',
