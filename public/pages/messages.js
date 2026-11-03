@@ -1519,7 +1519,10 @@ async function selectConversation(id) {
   renderInbox({ threadScroll: 'bottom' });
   try {
     await markConversationViewedHere(id);
-    renderLocalInboxUpdate(snapshotThreadScroll());
+    // The first bottom-scroll is scheduled for the next animation frame.
+    // A fast viewed-status update must not re-render and overwrite it with
+    // the initial scrollTop=0 snapshot before that frame has executed.
+    renderLocalInboxUpdate(null, snapshotConversationListScroll(), 'bottom');
   } catch (error) {
     toastError(error?.message || 'Could not update the local viewed status');
   }
@@ -1546,6 +1549,7 @@ async function selectConversation(id) {
 function renderLocalInboxUpdate(
   previousScroll,
   previousListScroll = snapshotConversationListScroll(),
+  threadScroll = 'position',
 ) {
   if (state.tab !== 'inbox') return;
   const list = document.getElementById('messages-conversation-list');
@@ -1554,7 +1558,7 @@ function renderLocalInboxUpdate(
   if (list) list.innerHTML = conversationListHtml();
   if (count) count.textContent = conversationCountLabel();
   if (threadPanel) threadPanel.innerHTML = threadHtml();
-  restoreThreadScroll('position', previousScroll);
+  restoreThreadScroll(threadScroll, previousScroll);
   restoreConversationListScroll(previousListScroll);
 }
 

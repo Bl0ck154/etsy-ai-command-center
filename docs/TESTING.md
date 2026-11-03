@@ -50,3 +50,7 @@ The first complete public offline run passed 1,444 tests, with three legacy-expe
 The Standalone browser acceptance workflow installs Chromium on a clean GitHub-hosted runner, generates a private .env, launches the real Node app, signs in using the generated password, verifies the actual Settings and AI pages, and captures screenshots. The workflow uses synthetic data only.
 
 It runs automatically for pull requests affecting public application files and can be launched manually. See the latest runs under GitHub Actions.
+
+## CI scroll-race regression (November 2026)
+
+One rerun of the 1,450-test suite reported a single intermittent failure in the Messages thread scroll-to-bottom expectation (1,449 passed). The application could render a viewed-status update before its initial requestAnimationFrame bottom-scroll, resetting the thread to the top. This is now corrected in the Messages UI, and is covered by the existing browser regression for newest-message positioning and history-prepend anchoring. See the latest full audit before claiming a green release.
