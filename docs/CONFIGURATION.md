@@ -1,6 +1,6 @@
 # Configuration reference
 
-This is a self-hosted project. Copy .env.example to a private .env, enter your own credentials, then run npm run doctor. The doctor prints only configuration status, never secret values.
+This is a self-hosted project. Run npm ci and npm run setup to generate a private .env with secure credentials, then run npm run doctor. The doctor prints only configuration status, never secret values.
 
 ## Core
 
@@ -22,9 +22,9 @@ This is a self-hosted project. Copy .env.example to a private .env, enter your o
 | ETSY_SHOP_ID | Authorized primary shop ID |
 | ETSY_SHOP_IDS | Optional ID:Name,ID:Name list for UI selection |
 | ETSY_ACCESS_TOKEN / ETSY_REFRESH_TOKEN | Optional initial tokens, never commit |
-| KV_REST_API_URL / KV_REST_API_TOKEN | Upstash-compatible Redis REST backend needed for revisioned OAuth token state |
+| KV_REST_API_URL / KV_REST_API_TOKEN | Optional compatible Redis REST provider for multi-instance use; local KV is included |
 
-**The present token repository requires Redis REST for OAuth exchange and refresh.** Starting the UI without credentials is possible; connecting a shop is not. Do not assume that selecting multiple shops provides isolated per-shop credentials. See [Etsy OAuth](ETSY-OAUTH.md).
+**The token repository requires a Redis REST-compatible interface, supplied automatically by the built-in single-process local adapter.** Starting the UI without credentials is possible; connecting a shop is not. Do not assume that selecting multiple shops provides isolated per-shop credentials. See [Etsy OAuth](ETSY-OAUTH.md).
 
 ### Optional separately installed Etsy API Hub
 
@@ -67,3 +67,9 @@ After npm ci and filling out your own .env, run:
     npm run doctor
 
 This does not connect to Etsy or validate an external AI model. Missing optional integrations are warnings, not proof of a broken core installation. See [Deployment](DEPLOYMENT.md).
+
+## Storage choice
+
+Default: KV_BACKEND=local and LOCAL_KV_FILE=./data/embedded-kv.json. npm start automatically launches a loopback-only authenticated adapter and writes a private file using atomic rename and restrictive file permissions. OAuth tokens and buyer/shop records may be stored there. Encrypt backups, restrict filesystem access, and run only one application process against the file.
+
+Alternative: KV_BACKEND=redis plus KV_REST_API_URL and KV_REST_API_TOKEN for a remote Upstash-compatible provider. This is recommended for multi-instance installations and advanced Redis-Lua worker features. Do not configure both backends at once.

@@ -28,23 +28,28 @@ jobs:
       - name: Redacted configuration preflight
         run: npm run doctor
       - name: Offline regression tests
-        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js tests/stats-bootstrap.unit.spec.js tests/public-hub-configuration.unit.spec.js tests/public-config-doctor.unit.spec.js tests/agent-model-routing.unit.spec.js tests/social-listing-understanding-prompts.unit.spec.js tests/gpt-router-contract.unit.spec.js tests/social-generate-media.unit.spec.js tests/messages-draft-delivery-application.unit.spec.js tests/etsy-oauth-client.unit.spec.js tests/agent-vision-dependencies.unit.spec.js tests/message-learning-flow.unit.spec.js
-      - name: Unconfigured localhost boot and health
+        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js tests/stats-bootstrap.unit.spec.js tests/public-hub-configuration.unit.spec.js tests/public-config-doctor.unit.spec.js tests/agent-model-routing.unit.spec.js tests/social-listing-understanding-prompts.unit.spec.js tests/embedded-kv.unit.spec.js tests/standalone-setup.unit.spec.js tests/gpt-router-contract.unit.spec.js tests/social-generate-media.unit.spec.js tests/messages-draft-delivery-application.unit.spec.js tests/etsy-oauth-client.unit.spec.js tests/agent-vision-dependencies.unit.spec.js tests/message-learning-flow.unit.spec.js
+      - name: Generate first-run local credentials
         run: |
-          PORT=3010 HOST=127.0.0.1 NODE_ENV=development node server.js > /tmp/etsy-public-startup.log 2>&1 &
+          npm run setup > /tmp/etsy-public-setup.log
+          npm run doctor
+      - name: Start standalone app and verify authenticated journey
+        run: |
+          PORT=3010 HOST=127.0.0.1 npm start > /tmp/etsy-public-startup.log 2>&1 &
           pid=$!
           trap 'kill "$pid" 2>/dev/null || true' EXIT
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:3010/healthz > /dev/null 2>&1; then
-              echo "Local health check passed"
+              node scripts/standalone-smoke.mjs
               exit 0
             fi
             if ! kill -0 "$pid" 2>/dev/null; then
-              echo "Server exited before health became available"
-              tail -n 80 /tmp/etsy-public-startup.log
+              echo "App exited during bootstrap"
+              tail -n 50 /tmp/etsy-public-startup.log
               exit 1
             fi
             sleep 1
           done
-          tail -n 80 /tmp/etsy-public-startup.log
+          echo "Standalone app health timed out"
+          tail -n 50 /tmp/etsy-public-startup.log
           exit 1

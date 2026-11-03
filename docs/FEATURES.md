@@ -26,4 +26,4 @@ For up-to-date availability and production cautions, see `LIMITATIONS.md`.
 
 ## Installation boundary
 
-The dashboard can start without live Etsy credentials. OAuth token exchange and refresh require a separately configured Redis REST backend. Etsy API Hub and Messages Bridge are independent, optional services. See [Configuration](CONFIGURATION.md).
+The dashboard can start without live Etsy credentials. OAuth token exchange and refresh use the included local Redis REST-compatible adapter or your own remote Redis REST endpoint. Etsy API Hub and Messages Bridge are independent, optional services. See [Configuration](CONFIGURATION.md).
