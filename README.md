@@ -29,6 +29,8 @@
 
 ## Preview
 
+[**Try the interactive demo (synthetic data)**](docs/demo/index.html) — static HTML, no account, no keys, no network requests and no Etsy actions.
+
 <p align="center"><img src="docs/assets/dashboard-preview.svg" alt="Illustrative dashboard with synthetic shop stats, listing performance and an AI context panel" width="100%"></p>
 <p align="center"><sub>Illustrative UI preview based on the application's design tokens and page structure. All data is synthetic. Not a live product screenshot.</sub></p>
 

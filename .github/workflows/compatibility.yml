@@ -27,3 +27,22 @@ jobs:
         run: npm run check
       - name: Offline regression tests
         run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js
+      - name: Unconfigured localhost boot and health
+        run: |
+          PORT=3010 HOST=127.0.0.1 NODE_ENV=development node server.js > /tmp/etsy-public-startup.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3010/healthz > /dev/null 2>&1; then
+              echo "Local health check passed"
+              exit 0
+            fi
+            if ! kill -0 "$pid" 2>/dev/null; then
+              echo "Server exited before health became available"
+              tail -n 80 /tmp/etsy-public-startup.log
+              exit 1
+            fi
+            sleep 1
+          done
+          tail -n 80 /tmp/etsy-public-startup.log
+          exit 1

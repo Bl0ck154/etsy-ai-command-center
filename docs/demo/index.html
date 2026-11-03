@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex">
+<title>AI Command Center — Interactive Demo (Synthetic Data)</title>
+<style>
+:root{--orange:#C85A2E;--orange2:#F4E4DB;--text:#20201E;--muted:#77736B;--border:#E5E1DA;--canvas:#F6F5F2;--green:#3C7A5B}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;font-size:14px}button{font:inherit;cursor:pointer}
+.demo-banner{padding:9px 15px;text-align:center;background:#243C36;color:#E7EFE9;font-size:12px;font-weight:650;letter-spacing:.01em}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 34px)}
+aside{background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:10px;padding:24px 18px 21px;border-bottom:1px solid var(--border)}
+.brand-icon{background:var(--orange);color:#fff;font-weight:800;border-radius:12px;padding:11px}
+.brand strong{font-size:13px;letter-spacing:.06em;line-height:1.35}.brand small{color:var(--muted);font-size:11px}
+.nav{padding:17px 12px;display:grid;gap:5px}
+.nav button{border:0;background:transparent;border-radius:9px;color:#5E655F;text-align:left;padding:13px 15px;display:flex;gap:14px;align-items:center}
+.nav button.active{background:var(--orange2);color:#A74822;font-weight:700}
+.nav button:hover{background:#F7F4F0}
+.side-bottom{margin-top:auto;padding:18px;color:var(--muted);border-top:1px solid var(--border);font-size:11px}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#EAF3ED;color:var(--green);padding:6px 11px;border-radius:22px;font-size:12px;font-weight:650}
+main{min-width:0}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 31px}
+.topbar strong{font-size:19px}.topbar .right{display:flex;gap:10px;align-items:center}
+.content{padding:32px;max-width:1550px;margin:auto}
+.eyebrow{font-size:12px;font-weight:750;color:var(--orange);letter-spacing:.11em;text-transform:uppercase}
+h1{font-size:29px;letter-spacing:-.03em;margin:10px 0 4px}
+.subtitle{color:var(--muted);margin:0 0 25px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:21px}
+.stat,.panel{background:white;border:1px solid var(--border);border-radius:14px}
+.stat{padding:22px}.stat label{display:block;font-size:11px;font-weight:750;color:var(--muted);letter-spacing:.045em;margin-bottom:13px}
+.stat .value{font-size:34px;letter-spacing:-.04em;font-weight:740}
+.stat .hint{margin-top:5px;color:var(--green);font-size:12px}
+.cols{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:18px}
+.panel{padding:22px}.panel h2{font-size:18px;margin:0}.panel .sub{color:var(--muted);font-size:12px;margin:4px 0 20px}
+.table{width:100%;border-collapse:collapse;text-align:left}.table th{font-size:11px;letter-spacing:.06em;color:var(--muted);padding:11px 10px;border-bottom:1px solid var(--border)}
+.table td{padding:16px 10px;border-bottom:1px solid var(--border)}.listing{display:flex;align-items:center;gap:12px}
+.thumb{width:44px;height:44px;border-radius:9px;flex:none;background:linear-gradient(145deg,#C6D9D1,#FAF4EA);display:flex;align-items:center;justify-content:center;font-size:24px}
+.small{font-size:12px;color:var(--muted)}.list-name{font-weight:700}
+button.primary{background:var(--orange);color:white;border:0;padding:12px 18px;border-radius:9px;font-weight:700}
+button.secondary{background:#fff;color:#555;border:1px solid var(--border);padding:11px 17px;border-radius:9px;font-weight:650}
+button.primary:hover{background:#A74822}
+.notice{background:#F5F4F1;border-radius:10px;padding:17px;line-height:1.55;color:#4D5550}
+.rail-buttons{display:grid;gap:10px;margin-top:17px}
+.agent-chat{display:grid;gap:16px;max-width:1000px}.message{display:flex;gap:14px;max-width:95%}.avatar{width:37px;height:37px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#E4E9E6;flex:none;font-weight:700}
+.avatar.bot{background:#EAF3ED;color:var(--green)}.bubble{background:#fff;border:1px solid var(--border);border-radius:14px;padding:17px 20px;line-height:1.55}
+.agent-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-left:52px}
+.action{background:white;border:1px solid var(--border);padding:18px;border-radius:12px}.action h3{margin:10px 0 7px;font-size:17px}
+.action p{color:#696D68;line-height:1.5}.action .status{font-size:11px;font-weight:700;color:#AA792D;text-transform:uppercase}
+.actions{display:flex;gap:8px;margin-top:14px}
+.note{margin-top:20px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--border);padding:13px 15px;border-radius:11px}
+.toast{position:fixed;right:30px;bottom:28px;background:#243C36;color:#fff;padding:14px 21px;border-radius:10px;box-shadow:0 9px 32px #0003;display:none}
+@media(max-width:1080px){.stats{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.app{grid-template-columns:190px 1fr}}
+@media(max-width:680px){.app{display:block}aside{border-bottom:1px solid var(--border)}.brand{padding:12px}.nav{display:flex;overflow-x:auto;padding:8px}.nav button{white-space:nowrap}.side-bottom{display:none}.stats{grid-template-columns:1fr 1fr}.content{padding:18px}.topbar{padding:0 18px}.agent-actions{grid-template-columns:1fr;margin-left:0}}
+</style>
+</head>
+<body>
+<div class="demo-banner">INTERACTIVE PUBLIC DEMO · SYNTHETIC DATA · NOT CONNECTED TO ETSY · NO REAL CHANGES POSSIBLE</div>
+<div class="app">
+<aside><div class="brand"><span class="brand-icon">AI</span><span><strong>AI COMMAND<br>CENTER</strong><br><small>For Etsy sellers</small></span></div>
+<nav class="nav" id="nav">
+<button data-page="dashboard" class="active"><span>▦</span> Dashboard</button>
+<button data-page="agent"><span>✦</span> AI Agent</button>
+<button data-page="listings"><span>▤</span> Listings</button>
+<button data-page="orders"><span>▣</span> Orders</button>
+<button data-page="social"><span>▥</span> Social Hub</button>
+</nav><div class="side-bottom"><span class="pill">● Demo mode</span><p>Source preview v0.1.x<br>Static UI example</p></div></aside>
+<main><header class="topbar"><strong id="page-title">Dashboard</strong><div class="right"><span class="pill">◉ Sample Studio</span><button class="secondary" data-page="agent">✦ Ask AI</button></div></header><section class="content" id="content"></section></main>
+</div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const listings=[
+ {name:"Ceramic espresso cup",kind:"Home décor",views:"1,490",orders:42,icon:"☕"},
+ {name:"Botanical printable set",kind:"Digital art",views:"980",orders:25,icon:"🌿"},
+ {name:"Linen kitchen towel",kind:"Kitchen textiles",views:"760",orders:18,icon:"▤"}
+];
+let page="dashboard";const approved={};
+function showToast(s){const el=document.getElementById("toast");el.textContent=s;el.style.display="block";setTimeout(()=>el.style.display="none",3600)}
+function listingRows(){return listings.map(x=>'<tr><td><div class="listing"><span class="thumb">'+x.icon+'</span><span><div class="list-name">'+x.name+'</div><div class="small">'+x.kind+'</div></span></div></td><td>'+x.views+'</td><td>'+x.orders+'</td></tr>').join("")}
+function overview(){return '<div class="eyebrow">Store intelligence</div><h1>Welcome back to your studio</h1><p class="subtitle">An overview of a fictional shop. Numbers and names below are sample data.</p><div class="stats"><div class="stat"><label>MONTHLY SALES</label><div class="value">$1,284</div><div class="hint">Example +12.6%</div></div><div class="stat"><label>ACTIVE LISTINGS</label><div class="value">128</div><div class="hint">4 new this month</div></div><div class="stat"><label>OPEN ORDERS</label><div class="value">7</div><div class="hint">2 need review</div></div><div class="stat"><label>FAVORITES</label><div class="value">814</div><div class="hint">Example +8.4%</div></div></div><div class="cols"><div class="panel"><h2>Listing performance</h2><p class="sub">Synthetic example · no Etsy API connection</p><table class="table"><thead><tr><th>LISTING</th><th>VIEWS</th><th>ORDERS</th></tr></thead><tbody>'+listingRows()+'</tbody></table><div class="rail-buttons"><button class="secondary" data-page="listings">Browse listings →</button></div></div><div class="panel"><h2>✦ Agent context</h2><p class="sub">A preview of the AI-assisted workflow</p><div class="notice"><strong>Possible opportunity</strong><br>Three listings may benefit from better main images. AI review has not been run in this demo.</div><div class="rail-buttons"><button class="primary" data-page="agent">Open AI Agent →</button><button class="secondary" data-page="social">Explore Social Hub</button></div></div></div>'}
+function agent(){return '<div class="eyebrow">AI-assisted workflow</div><h1>Review before making changes</h1><p class="subtitle">This scripted demo illustrates proposals. No live AI is running and approving changes does not call Etsy.</p><div class="agent-chat"><div class="message"><span class="avatar">U</span><div class="bubble">Check my listing photos and suggest improvements.</div></div><div class="message"><span class="avatar bot">✦</span><div class="bubble"><strong>AI assistant (example)</strong><p>I found two possible improvements in our fictional sample. Review the suggestions below before applying anything.</p><small>Demonstration response, not an actual model output.</small></div></div><div class="agent-actions">'+['Ceramic espresso cup','Botanical printable set'].map((n,i)=>'<div class="action"><span class="status">'+(approved[i]?'Accepted in demo':'Review required')+'</span><h3>'+n+'</h3><p>'+ (i===0?'Consider a stronger lead photo and descriptive alt text.':'Review image order and make the title more specific.')+'</p><div class="actions"><button class="primary" data-approve="'+i+'">Approve</button><button class="secondary" data-reject="'+i+'">Dismiss</button></div></div>').join("")+'</div></div><p class="note">The real application uses owner-approval gates for supported consequential actions. The demo runs offline with synthetic data.</p>'}
+function listingsPage(){return '<div class="eyebrow">Manual controls</div><h1>Listings</h1><p class="subtitle">Browse listings and work manually. AI is an optional tool, not required for day-to-day management.</p><div class="panel"><table class="table"><thead><tr><th>LISTING</th><th>VIEWS</th><th>ORDERS</th></tr></thead><tbody>'+listingRows()+'</tbody></table></div><p class="note">This static mockup does not edit actual listings. See the source app for the implemented UI and API routes.</p>'}
+function orders(){return '<div class="eyebrow">Fulfillment</div><h1>Recent orders</h1><p class="subtitle">Synthetic examples illustrating a manual order overview.</p><div class="panel"><table class="table"><thead><tr><th>ORDER</th><th>ITEM</th><th>STATUS</th></tr></thead><tbody><tr><td>#SAMPLE-1001</td><td>Ceramic espresso cup</td><td>Preparing</td></tr><tr><td>#SAMPLE-1002</td><td>Botanical printable set</td><td>Complete</td></tr><tr><td>#SAMPLE-1003</td><td>Linen kitchen towel</td><td>Ready to ship</td></tr></tbody></table></div>'}
+function social(){return '<div class="eyebrow">Campaign planning</div><h1>Social Hub</h1><p class="subtitle">Concept of a controlled marketing workflow. Autonomous publishing is not enabled in the public preview.</p><div class="panel"><h2>From shop data to a reviewed campaign</h2><p class="sub">Example stages</p><div class="notice">Shop context → Opportunity selection → Creative plan → Media generation → Visual QA → Owner review → Scheduling</div><p style="margin-top:20px">All marketing integrations require your own permissions and provider credentials. No posts are generated or published by this demonstration.</p><button class="secondary" data-page="agent">See approval concept →</button></div>'}
+function render(next){page=next;document.getElementById("page-title").textContent=({dashboard:"Dashboard",agent:"AI Agent",listings:"Listings",orders:"Orders",social:"Social Hub"})[page]||"Dashboard";document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));document.getElementById("content").innerHTML=page==="agent"?agent():page==="listings"?listingsPage():page==="orders"?orders():page==="social"?social():overview();window.scrollTo(0,0)}
+document.addEventListener("click",e=>{let n=e.target.closest("[data-page],[data-approve],[data-reject]");if(!n)return;if(n.dataset.page)render(n.dataset.page);else if(n.dataset.approve!==undefined){approved[n.dataset.approve]=true;render("agent");showToast("Approved in demo only. No Etsy changes made.")}else{showToast("Dismissed in demo. No Etsy changes made.")}});
+render("dashboard");
+</script>
+</body>
+</html>

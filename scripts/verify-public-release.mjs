@@ -10,7 +10,7 @@ const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
 const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
 if (pkg.name !== 'etsy-ai-command-center' || lock.name !== pkg.name || lock.version !== pkg.version) issues.push('Package name/version mismatch');
 if (pkg.license !== 'MIT') issues.push('License metadata mismatch');
-for (const rel of ['LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', 'docs/QUICKSTART.md', 'docs/LIMITATIONS.md', 'docs/RELEASE-READINESS.md', 'docs/assets/dashboard-preview.svg', 'docs/assets/ai-approval-preview.svg']) {
+for (const rel of ['LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', 'docs/QUICKSTART.md', 'docs/LIMITATIONS.md', 'docs/RELEASE-READINESS.md', 'docs/assets/dashboard-preview.svg', 'docs/assets/ai-approval-preview.svg', 'docs/demo/index.html']) {
   if (!fs.existsSync(path.join(root, rel))) issues.push('Missing file: ' + rel);
 }
 const sample = fs.readFileSync(path.join(root, '.env.example'), 'utf8');
