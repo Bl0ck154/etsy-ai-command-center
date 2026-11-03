@@ -90,8 +90,8 @@ function renderEtsyTab() {
     <div class="card mb-12">
       <div class="settings-group-title">Etsy API credentials</div>
       <div class="alert alert-info mb-12" style="font-size:12px">
-        Set these in the <strong>staging VPS environment</strong> (for example the app EnvironmentFile).
-        Changes take effect after deploy/restart.
+        Set your own credentials in the <strong>server environment</strong> (typically a private <code>.env</code> file).
+        Restart the application after changing environment variables. Etsy OAuth also needs persistent KV storage.
       </div>
       <div class="field"><label>API Key (keystring)</label>
         <input type="text" id="s-apikey" placeholder="ETSY_API_KEY"></div>
@@ -104,7 +104,7 @@ function renderEtsyTab() {
       <div class="field"><label>Client Secret <span class="badge badge-orange" style="font-size:9px">Required Feb 2026+</span></label>
         <input type="text" id="s-secret" placeholder="ETSY_CLIENT_SECRET"></div>
       <div class="field"><label>Shop ID</label>
-        <input type="text" id="s-shopid" placeholder="23207964" style="width:160px"></div>
+        <input type="text" id="s-shopid" placeholder="12345678" style="width:160px"></div>
       <div class="row" style="gap:8px;flex-wrap:wrap">
         <button class="btn btn-primary" onclick="window.testEtsy()">Test connection</button>
         <button class="btn" onclick="window.connectEtsyOAuth()">Connect Etsy</button>
@@ -225,7 +225,7 @@ function renderAITab() {
         <div class="field"><label>Image model</label><input type="text" id="external-image-model" list="external-image-model-options" value="${DEFAULT_MODELS.externalImage}" placeholder="${DEFAULT_MODELS.externalImage}"></div>
       </div>
       <datalist id="external-text-model-options">
-        <option value="codex/gpt-5.6-terra-medium">Verified project model</option>
+
       </datalist>
       <datalist id="external-image-model-options"></datalist>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">

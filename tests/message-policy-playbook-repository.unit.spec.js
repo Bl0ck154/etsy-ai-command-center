@@ -21,7 +21,7 @@ import {
 } from '../api/messages/revisioned-store-repository.js';
 
 const helper = fileURLToPath(new URL('./support/message-revision-process.mjs', import.meta.url));
-const shopId = '23207964';
+const shopId = '12345678';
 
 function testEnv() {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'message-revisioned-store-'));

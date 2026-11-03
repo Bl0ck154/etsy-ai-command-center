@@ -11,7 +11,8 @@ Prioritize outside-user reliability over adding feature count.
 - [x] Confirm no-credentials localhost startup and health check (Node 22)
 - [ ] Check each unconfigured UI route for usable fallback states
 - [ ] Keep offline tests green and meaningful in CI
-- [ ] Remove hidden assumptions about private server services and file paths
+- [ ] Finish removing host-specific assumptions and validate every optional integration
+- [x] Make the optional Etsy Hub path explicit and add public setup guides
 
 ## P1 — safe standalone operation
 

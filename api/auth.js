@@ -17,8 +17,8 @@ import {
   resetEtsyTokenCacheForTests,
 } from './etsy-auth/token-runtime.js';
 
-const DEFAULT_HUB_ROOT = '/opt/etsy-api-hub';
-const DEFAULT_CREDENTIAL_FILE = '/opt/etsy-api-hub-runtime/credentials/main.json';
+// The optional external Etsy API Hub is never implicitly tied to a host path.
+// A standalone public install works with the built-in legacy-token route.
 
 let hubModulePromise = null;
 let hubTokenStorePromise = null;
@@ -29,11 +29,23 @@ export function etsyApiHubEnabled(env = process.env) {
 }
 
 function hubRoot(env = process.env) {
-  return String(env.ETSY_API_HUB_ROOT || DEFAULT_HUB_ROOT).trim();
+  const value = String(env.ETSY_API_HUB_ROOT || '').trim();
+  if (value) return value;
+  const error = new Error(
+    'ETSY_API_HUB_ROOT is required when ETSY_API_HUB_ENABLED=true; configure the optional Hub path or disable the Hub adapter.'
+  );
+  error.code = 'ETSY_API_HUB_NOT_CONFIGURED';
+  throw error;
 }
 
 function hubCredentialFile(env = process.env) {
-  return String(env.ETSY_API_HUB_CREDENTIAL_FILE || DEFAULT_CREDENTIAL_FILE).trim();
+  const value = String(env.ETSY_API_HUB_CREDENTIAL_FILE || '').trim();
+  if (value) return value;
+  const error = new Error(
+    'ETSY_API_HUB_CREDENTIAL_FILE is required when ETSY_API_HUB_TOKEN_SOURCE=hub.'
+  );
+  error.code = 'ETSY_API_HUB_CREDENTIAL_STORE_NOT_CONFIGURED';
+  throw error;
 }
 
 function hubTokenSource(env = process.env) {

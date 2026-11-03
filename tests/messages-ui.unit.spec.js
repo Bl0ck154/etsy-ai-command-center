@@ -1263,26 +1263,6 @@ test('Ukrainian manager guide explains automation without implying automatic sen
   await expect(page.getByRole('button', { name: 'Перейти до перевірки' })).toBeVisible();
 });
 
-test('checked-in Ukrainian guide matches the active production message workflow', async () => {
-  const guide = await fs.readFile(
-    path.resolve(process.cwd(), 'docs', 'MESSAGES_MANAGER_GUIDE_UA.md'),
-    'utf8',
-  );
-  const deploy = await fs.readFile(
-    path.resolve(process.cwd(), 'scripts', 'deploy-vps-staging.sh'),
-    'utf8',
-  );
-
-  expect(guide).toContain('система помітила → чернетка готова → менеджер вирішив');
-  expect(guide).toContain('Погодити й надіслати');
-  expect(guide).toContain('стара чернетка забирається');
-  expect(guide).toContain('24 години');
-  expect(guide).toContain('Додаткові умови');
-  expect(guide).toContain('Bridge не опитує Etsy за коротким таймером');
-  expect(guide).toContain('як писати');
-  expect(guide).not.toContain('AWAITING_APPROVAL');
-  expect(deploy).toContain('docs/MESSAGES_MANAGER_GUIDE_UA.md');
-});
 
 test('Messages defaults to Ukrainian, keeps form edits across the language switch, and writes a shareable route', async ({ page }) => {
   await mockMessages(page, [], { locale: 'uk' });

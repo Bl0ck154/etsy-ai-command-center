@@ -22,7 +22,7 @@ function draft({
     created_at: createdAt,
     metadata: {
       generator,
-      dashboard_shop_id: '23207964',
+      dashboard_shop_id: '12345678',
       source_message_id: sourceMessageId,
     },
   };
@@ -56,7 +56,7 @@ function conversation() {
 
 test('manual reply learning survives a later buyer message and picks only the latest AI proposal', () => {
   const selected = selectObservedManualReplyCandidates({
-    shopId: '23207964',
+    shopId: '12345678',
     conversation: conversation(),
     drafts: [
       draft({
@@ -93,7 +93,7 @@ test('conversation reconciliation uses cached Bridge drafts only and records the
   const outcomes = [];
   try {
     const result = await reconcileObservedManualRepliesForConversation({
-      shopId: '23207964',
+      shopId: '12345678',
       conversationId: '1250240141',
       conversation: conversation(),
     }, {
@@ -133,7 +133,7 @@ test('conversation reconciliation uses cached Bridge drafts only and records the
     });
     expect(outcomes).toHaveLength(1);
     expect(outcomes[0]).toMatchObject({
-      shopId: '23207964',
+      shopId: '12345678',
       draftId: '20',
       outcome: 'SENT',
       finalBody: 'Yes, I can do that. Thank you for your order!',
@@ -154,7 +154,7 @@ test('conversation reconciliation is inert when learning capture is disabled', a
   let queried = false;
   try {
     const result = await reconcileObservedManualRepliesForConversation({
-      shopId: '23207964',
+      shopId: '12345678',
       conversationId: '1250240141',
       conversation: conversation(),
     }, {

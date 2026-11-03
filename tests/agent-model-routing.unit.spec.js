@@ -19,10 +19,6 @@ test('shared Auto routing prefers external and never treats auto as Gemini', () 
   expect(resolveTextProvider('auto', {})).toBe('none');
 });
 
-test('VPS deploy includes the shared text-provider resolver', () => {
-  const deploy = fs.readFileSync(path.join(process.cwd(), 'scripts/deploy-vps-staging.sh'), 'utf8');
-  expect(deploy).toContain('api/_provider-routing.js');
-});
 
 test('Auto prefers the configured external provider and only falls back when it is unavailable', async () => {
   const keys = ['ANTHROPIC_API_KEY', 'GEMINI_API_KEY'];

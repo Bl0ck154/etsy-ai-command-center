@@ -9,7 +9,7 @@ test('interactive AI draft loads semantic memory and captures the immutable prop
   let generationInput = null;
   let captured = null;
   const app = createMessagesDraftGenerationApplication({
-    bridgeStatus: async () => ({ account: { shop_id: '23207964' } }),
+    bridgeStatus: async () => ({ account: { shop_id: '12345678' } }),
     runtimeStatus: status => ({ ...status, order_linking_enabled: true }),
     refreshedConversationForDraft: async () => ({
       conversation: {
@@ -52,7 +52,7 @@ test('interactive AI draft loads semantic memory and captures the immutable prop
   });
 
   const result = await app.generateDraft({
-    shopId: '23207964',
+    shopId: '12345678',
     input: { scenario: 'freeform', conversation_id: '88', client_request_id: 'req-1' },
     currentActor: { id: 'owner' },
   });
@@ -61,7 +61,7 @@ test('interactive AI draft loads semantic memory and captures the immutable prop
   expect(generationInput.learnedExamples).toEqual(learned);
   expect(result.draft.metadata.learned_example_ids).toEqual(['mlf-1']);
   expect(captured).toMatchObject({
-    shopId: '23207964',
+    shopId: '12345678',
     draft: { id: '501' },
     generated: { reply_body: 'Yes, I can keep it blue.' },
     sourceMessageId: 'm-new',
@@ -117,7 +117,7 @@ test('combined delivery records edited SENT preference without changing delivery
   });
 
   const result = await app.approveAndSendDraft({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '501',
     approvedBody: 'Manager edited final',
     currentActor: { id: 'owner' },
@@ -126,7 +126,7 @@ test('combined delivery records edited SENT preference without changing delivery
 
   expect(result).toMatchObject({ sent: true, outcome: 'SENT', retry_allowed: false });
   expect(outcomeInput).toMatchObject({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '501',
     outcome: 'SENT',
     finalBody: 'Manager edited final',
@@ -184,13 +184,13 @@ test('review refresh conservatively learns one Bridge-observed manual Etsy reply
   });
 
   const refreshed = await app.refreshDraftForReview({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '700',
     currentActor: { id: 'owner' },
   });
   expect(refreshed.draft.status).toBe('SKIPPED');
   expect(learned).toMatchObject({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '700',
     outcome: 'SENT',
     finalBody: 'Yes, I can keep it blue.',
@@ -223,7 +223,7 @@ test('repeated approval never mistakes an already edited APPROVED body for the A
     },
   });
   const result = await app.approveDraft({
-    shopId: '23207964',
+    shopId: '12345678',
     draftId: '901',
     approvedBody: 'Manager edited final',
     currentActor: { id: 'owner' },

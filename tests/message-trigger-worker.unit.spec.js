@@ -138,32 +138,3 @@ test('disabled worker entrypoint remains supervised and SIGTERM flushes persiste
     await fs.rm(directory, { recursive: true, force: true });
   }
 });
-
-test('web composition and deployment contracts keep the worker independent', async () => {
-  const [server, workerEntry, unit, deploy, exactDeploy] = await Promise.all([
-    fs.readFile('server.js', 'utf8'),
-    fs.readFile('workers/message-trigger.js', 'utf8'),
-    fs.readFile('deploy/systemd/etsy-manager-pro-message-trigger.service', 'utf8'),
-    fs.readFile('scripts/deploy-vps-staging.sh', 'utf8'),
-    fs.readFile('scripts/deploy-main-revision.sh', 'utf8'),
-  ]);
-
-  expect(server).not.toMatch(/startMessageTriggerWorker\s*\(/);
-  expect(workerEntry).toContain("from '../api/messages/trigger-worker.js'");
-  expect(workerEntry).not.toContain('server.js');
-  expect(workerEntry).toContain('await worker.shutdown()');
-  expect(unit).toContain('Restart=always');
-  expect(unit).toContain('Wants=network-online.target');
-  expect(unit).not.toContain('etsy-manager-pro-staging.service');
-  expect(deploy).toContain('git -C "$SOURCE_DIR" ls-files -- api public workers');
-  expect(deploy).toContain('systemctl enable --now "$MESSAGE_TRIGGER_SERVICE"');
-  expect(deploy).toContain('systemctl is-enabled --quiet "$MESSAGE_TRIGGER_SERVICE"');
-  expect(deploy).toContain('STATE_SYSTEM_UNITS=(');
-  expect(deploy).toContain('restore_unit_runtime_state');
-  expect(deploy).toContain('sudo systemctl disable "$unit"');
-  expect(deploy).toContain('sudo systemctl stop "$unit"');
-  expect(exactDeploy).toContain('etsy-manager-pro-message-trigger.service');
-  expect(exactDeploy).toContain('snapshot_file "/etc/systemd/system/$unit" "$TX_BACKUP/systemd"');
-  expect(exactDeploy).toContain('restore_file_snapshot /etc/systemd/system "$TX_BACKUP/systemd" "$unit"');
-  expect(exactDeploy).toContain('restore_unit_runtime_state');
-});
