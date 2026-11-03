@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meta AI API Test</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #5b6472;
+      --border: #d9dee7;
+      --accent: #1664d9;
+      --accent-dark: #0f4fb0;
+      --danger: #b42318;
+      --ok: #087443;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #101317;
+        --panel: #171b22;
+        --text: #eef2f7;
+        --muted: #a8b0bd;
+        --border: #303846;
+        --accent: #6aa4ff;
+        --accent-dark: #4b83db;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 32px auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+      gap: 18px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    h1, h2 {
+      margin: 0 0 14px;
+      line-height: 1.15;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font: inherit;
+    }
+
+    input, textarea, select {
+      padding: 10px 11px;
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+    }
+
+    button:disabled {
+      opacity: .62;
+      cursor: wait;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .note {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .preview {
+      display: grid;
+      gap: 14px;
+    }
+
+    img, video {
+      width: 100%;
+      max-height: 420px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #000;
+      object-fit: contain;
+    }
+
+    pre {
+      max-height: 360px;
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(127, 127, 127, .08);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+        margin: 18px auto;
+      }
+
+      .row, .actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Meta AI API Test</h1>
+      <p class="note">This page calls <strong>/api/meta-ai</strong>. Best format is the full <code>Cookie</code> header from <code>meta.ai</code>, for example <code>ecto_1_sess=...; rd_challenge=...; datr=...; ...</code>. Leave it empty only if the server already has Meta AI cookies in env/KV.</p>
+
+      <label for="prompt">Prompt</label>
+      <textarea id="prompt">Animate this image into a short video with gentle natural motion.</textarea>
+
+      <label for="image">Reference image</label>
+      <input id="image" type="file" accept="image/*">
+
+      <label for="cookieHeader">Meta AI cookies</label>
+      <textarea id="cookieHeader" autocomplete="off" spellcheck="false" placeholder="ecto_1_sess=YOUR_VALUE; rd_challenge=YOUR_VALUE"></textarea>
+
+      <div class="row">
+        <div>
+          <label for="timeoutMs">Timeout ms</label>
+          <input id="timeoutMs" type="number" min="30000" step="1000" value="180000">
+        </div>
+        <div>
+          <label for="downloadResult">Download result</label>
+          <select id="downloadResult">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="statusBtn" type="button">Check Status</button>
+        <button id="generateBtn" type="button">Generate Video</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="preview">
+      <h2>Preview</h2>
+      <img id="imagePreview" alt="Selected reference preview" hidden>
+      <video id="videoPreview" controls hidden></video>
+      <h2>Response</h2>
+      <pre id="response">{}</pre>
+    </section>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const els = {
+      prompt: $('prompt'),
+      image: $('image'),
+      cookieHeader: $('cookieHeader'),
+      timeoutMs: $('timeoutMs'),
+      downloadResult: $('downloadResult'),
+      statusBtn: $('statusBtn'),
+      generateBtn: $('generateBtn'),
+      status: $('status'),
+      response: $('response'),
+      imagePreview: $('imagePreview'),
+      videoPreview: $('videoPreview'),
+    };
+
+    function setStatus(text, type = '') {
+      els.status.className = `status ${type}`.trim();
+      els.status.textContent = text;
+    }
+
+    function showResponse(data) {
+      const safe = JSON.parse(JSON.stringify(data || {}));
+      if (safe?.video?.base64) safe.video.base64 = `[base64 ${safe.video.base64.length} chars]`;
+      if (safe?.video?.videoUrl) safe.video.videoUrl = safe.video.videoUrl.slice(0, 220);
+      els.response.textContent = JSON.stringify(safe, null, 2);
+    }
+
+    function readFileAsData(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error('File read failed'));
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function requestJson(url, payload) {
+      const res = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const text = await res.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { error: text || `HTTP ${res.status}` };
+      }
+      if (!res.ok) {
+        const err = new Error(data.error || `HTTP ${res.status}`);
+        err.data = data;
+        throw err;
+      }
+      return data;
+    }
+
+    async function checkStatus() {
+      setStatus('Checking Meta AI session...');
+      els.statusBtn.disabled = true;
+      try {
+        const cookieHeader = els.cookieHeader.value.trim().replace(/^cookie\s*:\s*/i, '').trim();
+        const body = { action: 'status' };
+        if (cookieHeader) body.cookieHeader = cookieHeader;
+        const res = await fetch('/api/meta-ai', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
+        showResponse(data);
+        setStatus(res.ok ? 'Status request completed.' : data.error || `HTTP ${res.status}`, res.ok ? 'ok' : 'error');
+      } catch (err) {
+        showResponse(err.data || { error: err.message });
+        setStatus(err.message, 'error');
+      } finally {
+        els.statusBtn.disabled = false;
+      }
+    }
+
+    async function generateVideo() {
+      const file = els.image.files && els.image.files[0];
+      if (!file) {
+        setStatus('Choose a reference image first.', 'error');
+        return;
+      }
+      const prompt = els.prompt.value.trim();
+      if (!prompt) {
+        setStatus('Prompt is required.', 'error');
+        return;
+      }
+
+      setStatus('Reading image...');
+      els.generateBtn.disabled = true;
+      els.videoPreview.hidden = true;
+      els.videoPreview.removeAttribute('src');
+
+      try {
+        const dataUrl = await readFileAsData(file);
+        const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+        if (!match) throw new Error('Could not convert image to base64.');
+
+        const body = {
+          action: 'animateImage',
+          prompt,
+          referenceImage: {
+            mimeType: match[1],
+            base64: match[2],
+          },
+          timeoutMs: Number(els.timeoutMs.value || 180000),
+          downloadResult: els.downloadResult.value === 'true',
+        };
+        const cookieHeader = els.cookieHeader.value.trim().replace(/^cookie\s*:\s*/i, '').trim();
+        if (cookieHeader) body.cookieHeader = cookieHeader;
+
+        setStatus('Submitting to Meta AI. This can take a few minutes...');
+        const data = await requestJson('/api/meta-ai', body);
+        showResponse(data);
+
+        const video = data.video || data;
+        if (video.base64) {
+          els.videoPreview.src = `data:${video.mimeType || 'video/mp4'};base64,${video.base64}`;
+          els.videoPreview.hidden = false;
+        } else if (video.videoUrl) {
+          els.videoPreview.src = video.videoUrl;
+          els.videoPreview.hidden = false;
+        }
+        setStatus('Generation request completed.', 'ok');
+      } catch (err) {
+        showResponse(err.data || { error: err.message });
+        setStatus(err.message, 'error');
+      } finally {
+        els.generateBtn.disabled = false;
+      }
+    }
+
+    els.image.addEventListener('change', () => {
+      const file = els.image.files && els.image.files[0];
+      if (!file) {
+        els.imagePreview.hidden = true;
+        els.imagePreview.removeAttribute('src');
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      els.imagePreview.src = url;
+      els.imagePreview.hidden = false;
+    });
+
+    els.statusBtn.addEventListener('click', checkStatus);
+    els.generateBtn.addEventListener('click', generateVideo);
+  </script>
+</body>
+</html>

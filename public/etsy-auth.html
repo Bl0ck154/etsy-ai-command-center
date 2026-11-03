@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connect Etsy Shop — EM - Shop Manager Pro</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); padding: 40px; max-width: 480px; width: 100%; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .sub { color: #666; font-size: 14px; margin-bottom: 28px; }
+    label { font-size: 13px; font-weight: 600; color: #333; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.15s; }
+    input:focus { border-color: #C85A2E; }
+    .field { margin-bottom: 18px; }
+    .hint { font-size: 12px; color: #888; margin-top: 4px; }
+    .btn { width: 100%; padding: 12px; background: #C85A2E; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .result { background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 16px; margin-top: 20px; }
+    .result h3 { font-size: 14px; font-weight: 700; color: #166534; margin-bottom: 10px; }
+    .env-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .env-key { font-size: 12px; font-weight: 600; color: #555; min-width: 180px; }
+    .env-val { flex: 1; padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; font-family: monospace; background: #fafafa; }
+    .copy-btn { padding: 5px 10px; background: #e5e7eb; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+    .copy-btn:hover { background: #d1d5db; }
+    .error { background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 10px; padding: 12px 16px; color: #991b1b; font-size: 13px; margin-top: 16px; }
+    .info { background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 12px 16px; color: #1e3a8a; font-size: 13px; margin-bottom: 18px; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2.5px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    a { color: #C85A2E; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .logo { font-size: 28px; margin-bottom: 16px; }
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🛍️</div>
+  <h1>Connect your Etsy shop</h1>
+  <p class="sub" id="subtitle">One-time setup. Saves the Etsy connection in this application.</p>
+
+  <!-- Step 1: Enter API key -->
+  <div class="step active" id="step1">
+    <div class="info">
+      <strong>Required Etsy callback URL</strong><br>
+      Add this exact URL in Etsy Developers → Your App → Callback URLs before connecting:
+      <div class="env-row" style="margin-top:8px;margin-bottom:0">
+        <input class="env-val" type="text" id="callback-url" readonly onclick="this.select()">
+        <button class="copy-btn" onclick="copyCallbackUrl(this)">Copy</button>
+      </div>
+    </div>
+    <div class="field" id="api-key-field">
+      <label>Etsy API Keystring</label>
+      <input type="text" id="api-key" placeholder="aaaabbbbcccc1234" autocomplete="off">
+      <div class="hint">From <a href="https://www.etsy.com/developers/your-apps" target="_blank">etsy.com/developers/your-apps</a> → Your App → Keystring</div>
+    </div>
+    <div class="field" id="client-secret-field">
+      <label>Client Secret</label>
+      <input type="text" id="client-secret" placeholder="aaaabbbbcccc1234" autocomplete="off">
+      <div class="hint">Same page → Shared Secret (required Feb 2026+)</div>
+    </div>
+    <button class="btn" onclick="startOAuth()">Connect Etsy Shop →</button>
+    <div id="step1-error"></div>
+  </div>
+
+  <!-- Step 2: OAuth redirect happening -->
+  <div class="step" id="step2">
+    <p style="text-align:center;color:#555;font-size:14px;margin-bottom:20px">
+      <span class="spinner"></span>Waiting for Etsy authorization…
+    </p>
+    <p style="text-align:center;font-size:13px;color:#888">A popup opened to Etsy.<br>Authorize the app then come back here.</p>
+    <div id="step2-error"></div>
+  </div>
+
+  <!-- Step 3: Success -->
+  <div class="step" id="step3">
+    <div class="result">
+      <h3>✓ Connected! Etsy tokens were saved automatically.</h3>
+      <p style="font-size:13px;color:#166534;line-height:1.5;margin-bottom:14px">
+        Your Etsy access and refresh tokens are now stored in the application runtime. No manual server copy is needed.
+      </p>
+      <button class="btn" onclick="goToSettings()">Back to Settings →</button>
+      <button class="copy-btn" style="width:100%;margin-top:10px;padding:10px;font-size:13px" onclick="testConnection(this)">Test connection</button>
+      <div id="connection-test" style="font-size:12px;margin-top:10px;color:#555"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCOPES = 'listings_r listings_w listings_d transactions_r transactions_w shops_r shops_w profile_r address_r address_w email_r';
+
+let state = '';
+let verifier = '';
+let apiKey = '';
+let clientSecret = '';
+let useEnvConfig = false;
+
+function generateRandom(len) {
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function sha256Base64(str) {
+  const data = new TextEncoder().encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function startOAuth() {
+  apiKey = document.getElementById('api-key').value.trim();
+  clientSecret = document.getElementById('client-secret').value.trim();
+  
+  if (!apiKey) { showError('step1', 'Enter your API Keystring'); return; }
+  if (!useEnvConfig && !clientSecret) { showError('step1', 'Enter your Client Secret (required Feb 2026+)'); return; }
+
+  state    = generateRandom(16);
+  verifier = generateRandom(32);
+  const challenge = await sha256Base64(verifier);
+  const redirectUri = getRedirectUri();
+  sessionStorage.setItem('etsy_oauth', JSON.stringify({ state, verifier, apiKey, clientSecret, redirectUri }));
+
+  const params = new URLSearchParams({
+    response_type:         'code',
+    client_id:             apiKey,
+    redirect_uri:          redirectUri,
+    scope:                 SCOPES,
+    state:                 state,
+    code_challenge:        challenge,
+    code_challenge_method: 'S256',
+  });
+
+  const authUrl = 'https://www.etsy.com/oauth/connect?' + params.toString();
+  
+  setStep('step2');
+  window.location.href = authUrl;
+}
+
+async function handleCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code  = params.get('code');
+  const rState = params.get('state');
+  const error = params.get('error');
+
+  if (error) { setStep('step1'); showError('step1', 'Etsy returned: ' + error); return; }
+  if (!code)  return;
+
+  // Restore saved state
+  const saved = sessionStorage.getItem('etsy_oauth');
+  if (!saved) { showError('step1', 'Session expired, please start again'); setStep('step1'); return; }
+  const { state: savedState, verifier: savedVerifier, apiKey: savedKey, clientSecret: savedSecret, redirectUri } = JSON.parse(saved);
+
+  if (rState !== savedState) { showError('step1', 'State mismatch — possible CSRF, try again'); setStep('step1'); return; }
+
+  setStep('step2');
+
+  // Exchange code for tokens via our API
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action:       'exchange',
+        code,
+        verifier:     savedVerifier,
+        api_key:      savedKey,
+        client_secret: savedSecret,
+        redirect_uri: redirectUri || getRedirectUri(),
+      }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    showResult(data);
+    setStep('step3');
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+  } catch (err) {
+    setStep('step1');
+    showError('step1', 'Token exchange failed: ' + err.message);
+  }
+}
+
+async function loadEnvConfigIfRequested() {
+  useEnvConfig = new URLSearchParams(window.location.search).get('env') === '1';
+  if (!useEnvConfig || window.location.search.includes('code=')) return;
+
+  document.getElementById('subtitle').textContent = 'Official Etsy OAuth using credentials already configured on the application server.';
+  document.getElementById('client-secret-field').style.display = 'none';
+  document.getElementById('api-key').disabled = true;
+  document.getElementById('api-key').placeholder = 'Loading from server configuration...';
+
+  try {
+    const res = await fetch('/api/auth?action=oauth-config');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    if (!data.api_key) throw new Error('ETSY_API_KEY is not configured on the application server');
+    if (!data.has_client_secret) throw new Error('ETSY_CLIENT_SECRET is not configured on the application server');
+    document.getElementById('api-key').value = data.api_key;
+    document.getElementById('api-key').placeholder = 'Loaded from server configuration';
+  } catch (err) {
+    showError('step1', err.message || 'Could not load Etsy OAuth configuration from the application server');
+  }
+}
+
+function getRedirectUri() {
+  return window.location.origin + '/etsy-auth.html';
+}
+
+function copyCallbackUrl(btn) {
+  navigator.clipboard.writeText(getRedirectUri()).then(() => {
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+}
+
+function showResult(data) {
+  const el = document.getElementById('connection-test');
+  if (el && data.shop_id) el.textContent = `Connected shop ID: ${data.shop_id}`;
+}
+
+function goToSettings() {
+  window.location.href = '/#settings';
+}
+
+async function testConnection(btn) {
+  const out = document.getElementById('connection-test');
+  btn.disabled = true;
+  btn.textContent = 'Testing...';
+  if (out) out.textContent = 'Testing Etsy connection...';
+  try {
+    const res = await fetch('/api/etsy?action=getShop');
+    const json = await res.json();
+    if (!res.ok || json.error) throw new Error(json.error || `HTTP ${res.status}`);
+    const shop = json.data || json;
+    if (out) out.textContent = `✓ Connected: ${shop.shop_name || shop.name || shop.shop_id || 'Etsy shop'}`;
+    btn.textContent = 'Connection works';
+  } catch (err) {
+    if (out) out.textContent = `✕ ${err.message}`;
+    btn.disabled = false;
+    btn.textContent = 'Test connection';
+  }
+}
+
+function setStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+}
+
+function showError(stepId, msg) {
+  const el = document.getElementById(stepId + '-error');
+  if (!el) return;
+  const div = document.createElement('div');
+  div.className = 'error';
+  div.textContent = msg;
+  el.innerHTML = '';
+  el.appendChild(div);
+}
+
+document.getElementById('callback-url').value = getRedirectUri();
+loadEnvConfigIfRequested();
+
+// Handle OAuth callback on page load
+if (window.location.search.includes('code=')) {
+  handleCallback();
+}
+</script>
+</body>
+</html>

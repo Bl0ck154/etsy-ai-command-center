@@ -1,0 +1,34 @@
+# Runtime secrets and deployment state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+credentials.json
+secrets.json
+*.secret
+# Runtime state
+data/
+logs/
+.cache/
+.local/
+.pki/
+.npm/
+node_modules/
+playwright-report/
+test-results/
+coverage/
+dist/
+build/
+*.log
+*.bak
+*.backup
+*.db
+*.sqlite*
+.DS_Store
+.idea/
+.vscode/

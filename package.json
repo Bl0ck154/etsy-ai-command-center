@@ -1,0 +1,64 @@
+{
+  "name": "etsy-ai-command-center",
+  "version": "0.1.0",
+  "description": "Self-hosted Etsy seller dashboard with an actionable AI assistant, listing management, media workflows and human-approved automations",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "start:staging": "AUTOPUBLISH_ENABLED=false NODE_ENV=production node server.js",
+    "test": "playwright test",
+    "test:unit": "playwright test --config=playwright.unit.config.js",
+    "test:gpt": "playwright test tests/gpt- --config=playwright.unit.config.js",
+    "test:gpt:contract": "node scripts/verify-gpt-actions.js",
+    "test:syntax": "node scripts/verify-runtime-syntax.mjs",
+    "test:api": "playwright test tests/api.spec.js",
+    "test:smoke": "playwright test tests/smoke.spec.js",
+    "test:create": "playwright test tests/create.spec.js",
+    "test:agent": "playwright test tests/agent.spec.js",
+    "test:social": "playwright test tests/social.spec.js",
+    "test:social-agent": "playwright test tests/social-agent.spec.js",
+    "test:ui": "playwright test --headed",
+    "test:report": "playwright show-report",
+    "test:unit:full": "playwright test --config=playwright.unit.config.js",
+    "check": "node --check server.js && node --check api/agent.js && node --check api/social.js && node --check public/app.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "isolated-vm": "^6.1.2",
+    "metaai-cookie-client": "git+https://github.com/Bl0ck154/metaai-cookie-client.git#af2454f0038a069b973f7fa5579a409bc5bf5530",
+    "playwright": "1.58.2",
+    "sharp": "^0.34.5"
+  },
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bl0ck154/etsy-ai-command-center.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bl0ck154/etsy-ai-command-center/issues"
+  },
+  "homepage": "https://github.com/Bl0ck154/etsy-ai-command-center#readme",
+  "keywords": [
+    "etsy",
+    "etsy-seller",
+    "shop-management",
+    "dashboard",
+    "ai-agent",
+    "ai-copilot",
+    "automation",
+    "self-hosted",
+    "listing-management"
+  ]
+}
