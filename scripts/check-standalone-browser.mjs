@@ -21,6 +21,7 @@ try {
   await page.locator('#sidebar').waitFor({ timeout: 18000 });
   await page.locator('#main-area .page-title').getByText('Settings').waitFor({ timeout: 20000 });
   await page.locator('#settings-tab-content').getByText('Etsy API credentials').waitFor();
+  await page.waitForFunction(() => document.getElementById('token-timer')?.textContent?.includes('Not connected'), { timeout: 12000 });
   const title = await page.title();
   if (!title.includes('AI Command Center')) throw new Error('Product branding missing');
   await page.screenshot({ path: 'artifacts/standalone-settings.png' });

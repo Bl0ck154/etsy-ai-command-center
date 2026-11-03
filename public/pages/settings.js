@@ -53,7 +53,7 @@ export async function renderSettings(container) {
         <div class="page-subtitle">Configure your shop, AI providers and optional integrations</div>
       </div>
     </div>
-    <div class="alert alert-info" style="margin:0 24px 16px;line-height:1.6">
+    <div class="alert alert-info" style="margin:0 24px 16px;line-height:1.6;display:block;font-size:13px">
       <strong>New installation?</strong> Start with the generated login credentials from <code>npm run setup</code>.
       Add your own Etsy API key, shared secret and shop ID in the server <code>.env</code>, restart the app,
       then click <strong>Connect Etsy</strong> below. You can also configure an AI provider on the next tab.
@@ -96,7 +96,7 @@ function renderEtsyTab() {
   return `
     <div class="card mb-12">
       <div class="settings-group-title">Etsy API credentials</div>
-      <div class="alert alert-info mb-12" style="font-size:12px">
+      <div class="alert alert-info mb-12" style="font-size:12px;display:block;line-height:1.6">
         Set your own credentials in the <strong>server environment</strong> (typically a private <code>.env</code> file).
         Restart the application after changing environment variables. Etsy OAuth also needs persistent KV storage.
       </div>
@@ -1981,6 +1981,11 @@ async function checkTokenStatus() {
     const el = document.getElementById('token-timer');
     if (!el) return;
     const secs = status.expires_in_seconds || 0;
+    if (!status.valid) {
+      el.className = 'token-timer expired';
+      el.textContent = status.last_error ? 'Token issue: ' + status.last_error : 'Not connected';
+      return;
+    }
     el.className = secs > 300 ? 'token-timer' : secs > 0 ? 'token-timer expiring' : 'token-timer expired';
     el.textContent = status.last_error ? `Token issue: ${status.last_error}` : secs > 0 ? `Expires in ${Math.floor(secs / 60)}m ${secs % 60}s` : 'Expired';
     if (secs > 0) setTimeout(checkTokenStatus, 30000);
