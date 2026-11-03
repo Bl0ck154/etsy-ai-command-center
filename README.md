@@ -110,14 +110,14 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
 | Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
-| Hosted offline smoke | **63 selected tests passed** on Node 22 |
+| Hosted offline smoke | **68 selected tests passed** on Node 22 |
 | Full unit and browser test suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |
 | Autonomous Social producer | Not bundled |
 | Production readiness | **Not declared** |
 
-[Release-readiness audit](docs/RELEASE-READINESS.md) · [Deployment](docs/DEPLOYMENT.md) · [AI providers](docs/AI-PROVIDERS.md) · [Known limitations](docs/LIMITATIONS.md) · [FAQ](docs/FAQ.md) · [Roadmap](docs/ROADMAP.md)
+[Release-readiness audit](docs/RELEASE-READINESS.md) · [Testing](docs/TESTING.md) · [Maintainer sync](docs/MAINTAINER-SYNC.md) · [Deployment](docs/DEPLOYMENT.md) · [AI providers](docs/AI-PROVIDERS.md) · [Known limitations](docs/LIMITATIONS.md) · [FAQ](docs/FAQ.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Development
 

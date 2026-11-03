@@ -2,11 +2,11 @@
   "schema_version": 1,
   "source": "api/social.js pre-extraction listing-understanding prompt strings",
   "primary": {
-    "sha256": "04d0a1d4845b20470653c4da0af2b6f7b4b75750b173015d9ccf9310bd9fb01f",
-    "chars": 27508
+    "sha256": "48d367b59528a9a252e3fa8d43b1859e2c18d962dfea949567a0a2ed8c08ced0",
+    "chars": 27528
   },
   "repair": {
-    "sha256": "792c6987e195af3bc71cb891c2f605d2be1a9465347a03270c9f0cfd8c4f36a8",
-    "chars": 19924
+    "sha256": "55128a0c080958eab473dcbff5cd16488721046fc830282486a440236a4250fe",
+    "chars": 19934
   }
 }
