@@ -29,17 +29,18 @@
 
 ## Preview
 
-[**Try the interactive demo (synthetic data)**](docs/demo/index.html) — static HTML, no account, no keys, no network requests and no Etsy actions.
+[**▶ Open the interactive demo**](https://bl0ck154.github.io/etsy-ai-command-center/demo/) — synthetic shop, no account, no keys, and no Etsy actions.
+[View the demo source](docs/demo/index.html).
 
-<p align="center"><img src="docs/assets/dashboard-preview.svg" alt="Illustrative dashboard with synthetic shop stats, listing performance and an AI context panel" width="100%"></p>
-<p align="center"><sub>Illustrative UI preview based on the application's design tokens and page structure. All data is synthetic. Not a live product screenshot.</sub></p>
+<p align="center"><img src="docs/assets/demo-dashboard.png" alt="Screenshot of the synthetic interactive demo dashboard, showing shop metrics and an AI context panel" width="100%"></p>
+<p align="center"><sub>Real screenshot of the <a href="https://bl0ck154.github.io/etsy-ai-command-center/demo/">interactive static demo</a> using synthetic data. It is <strong>not</strong> a screenshot of the connected production application.</sub></p>
 
 <details>
 <summary><b>See the AI approval workflow concept</b></summary>
 
-![AI assistant owner-review concept using synthetic listings](docs/assets/ai-approval-preview.svg)
+![Screenshot of the synthetic interactive demo showing an AI response and two approval cards](docs/assets/demo-ai-approval.png)
 
-<sub>Concept illustration: specific AI actions depend on your provider, Etsy API access and configured workflow.</sub>
+<sub>Screenshot of scripted demonstration UI. No live model is running; approvals modify only the demonstration state.</sub>
 
 </details>
 
@@ -106,7 +107,7 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | --- | --- |
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
-| Clean install / dependency compatibility | **Under verification** |
+| Clean install / dependency compatibility | **Node 22 @ GitHub Actions passed**; other environments untested |
 | Full unit and browser test suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |

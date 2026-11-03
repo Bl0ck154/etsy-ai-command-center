@@ -26,7 +26,7 @@ jobs:
       - name: Quick checks
         run: npm run check
       - name: Offline regression tests
-        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js
+        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js tests/stats-bootstrap.unit.spec.js
       - name: Unconfigured localhost boot and health
         run: |
           PORT=3010 HOST=127.0.0.1 NODE_ENV=development node server.js > /tmp/etsy-public-startup.log 2>&1 &

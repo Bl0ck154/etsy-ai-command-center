@@ -7,7 +7,8 @@ Prioritize outside-user reliability over adding feature count.
 - [x] Fresh Git history and initial privacy audit
 - [x] Independent README, setup guide, sample config and license
 - [x] Synthetic, clearly labeled interface illustrations
-- [ ] Confirm clean install, no-credentials bootstrap and startup
+- [x] Confirm Node 22 dependency installation on a clean hosted runner
+- [ ] Confirm no-credentials bootstrap and startup
 - [ ] Keep offline tests green and meaningful in CI
 - [ ] Remove hidden assumptions about private server services and file paths
 
@@ -17,7 +18,8 @@ Prioritize outside-user reliability over adding feature count.
 - [ ] Reliable human approval UX for listing edits
 - [ ] Visible feature-gating when external services are absent
 - [ ] Backup, restore, configuration migrations and upgrades
-- [ ] Real screenshots from a fully synthetic local installation
+- [x] Captured screenshots of the static synthetic demo
+- [ ] Real UI screenshots from a fully synthetic installation of the actual application
 
 ## P2 — integrations
 

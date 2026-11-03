@@ -6,11 +6,18 @@ import { etsyFetch, getShopId } from './_etsy.js';
 import { isCurrentPaidReceipt } from '../public/utils/receipt-lifecycle.js';
 import { createStatsApplication } from './stats/application.js';
 
-const statsApplication = createStatsApplication({
-  etsyFetch,
-  shopId: getShopId(),
-  isCurrentPaidReceipt,
-});
+// Construct shop-scoped analytics only when the endpoint is used.
+// A fresh self-hosted installation must boot before Etsy credentials are configured.
+function applicationForConfiguredShop() {
+  const shopId = String(getShopId() || '').trim();
+  if (!shopId) {
+    const error = new Error('Configure ETSY_SHOP_ID or ETSY_SHOP_IDS to use Etsy analytics');
+    error.status = 503;
+    error.code = 'ETSY_SHOP_NOT_CONFIGURED';
+    throw error;
+  }
+  return createStatsApplication({ etsyFetch, shopId, isCurrentPaidReceipt });
+}
 
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -20,6 +27,7 @@ export default async function handler(req, res) {
 
   try {
     let result;
+    const statsApplication = applicationForConfiguredShop();
     switch (action) {
       case 'getShopStats':
         result = await statsApplication.getShopStats({ days, granularity });

@@ -18,18 +18,18 @@ This document is the status of the **public source preview**, not a claim that t
 
 ## P0 work before a production-ready label
 
-- [ ] Verify dependency installation on a clean Node.js 22 host
+- [x] Verify dependency installation on a clean Node.js 22 GitHub Actions host
 - [ ] Verify server boots with no live account and handles unconfigured features clearly
 - [ ] Run and repair the isolated unit suite
 - [ ] Verify standalone Etsy OAuth and manual editing using an approved shop
 - [ ] Replace remaining optional hardcoded host-specific paths with portable configuration
-- [ ] Capture actual UI screenshots from a synthetic test instance
+- [x] Capture actual screenshots of a separate, synthetic interactive demo (not the live application); connected-app screenshots still needed
 - [ ] Define storage backup, upgrade, rollback and restore procedures
 - [ ] Validate the Etsy API license, AI-data-processing terms and any public seller app requirements
 - [ ] Review security hardening and production networking
 
 ## Important limitations
 
-The public source snapshot intentionally excludes original deployment files, runtime data and the independently hosted Messages Bridge. Some optional paths still expect compatible external infrastructure. A source check only confirms syntax and repository hygiene, not a functioning installation.
+The public source snapshot intentionally excludes original deployment files, runtime data and the independently hosted Messages Bridge. The public demo is static and deliberately has no Etsy connectivity. Some optional paths still expect compatible external infrastructure. A source check only confirms syntax and repository hygiene, not a functioning installation.
 
 See [quick start](QUICKSTART.md), [integrations](INTEGRATIONS.md), [limitations](LIMITATIONS.md) and [roadmap](ROADMAP.md).
