@@ -184,7 +184,7 @@ window.navigate = async function (pageId, params = {}) {
   if (pageId === 'agent') window.closeAgentFloat?.();
 
   const main = document.getElementById('main-area');
-  main.innerHTML = '';
+  main.innerHTML = '<div class="page-body"><div class="alert alert-info" style="margin:36px auto;max-width:620px">Loading ' + escHtml(PAGES[pageId].label) + '...</div></div>';
   main.style.cssText = ''; // reset any styles set by previous page (e.g. agent sets overflow:hidden)
   try {
     const render = PAGES[pageId].render || await loadPageRenderer(pageId);
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     <nav class="sidebar" id="sidebar">${buildSidebar()}</nav>
     <div class="app-workspace">
       ${buildTopbar()}
-      <main class="main-area" id="main-area"></main>
+      <main class="main-area" id="main-area"><div class="page-body"><div class="alert alert-info" style="margin:36px auto;max-width:620px">Preparing your workspace...</div></div></main>
     </div>`;
 
   // External Etsy/CDN media can be unavailable in privacy-restricted browsers.
@@ -572,6 +572,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Accept legacy direct links such as /schedule?preview_id=..., then normalize
   // them once so later navigation cannot retain that page's object ID.
   const initialRoute = currentRoute();
+  // A fresh install has no Etsy shop yet: start with setup instructions instead of an empty AI screen.
+  if (!initialShop && !window.location.hash && window.location.pathname === '/') {
+    initialRoute.page = 'settings';
+    initialRoute.params = {};
+  }
   writeRoute(initialRoute.page, initialRoute.params, { replace: true });
   await origNavigate(initialRoute.page, initialRoute.params);
 });
