@@ -9,8 +9,9 @@ Prioritize outside-user reliability over adding feature count.
 - [x] Synthetic, clearly labeled interface illustrations
 - [x] Confirm Node 22 dependency installation on a clean hosted runner
 - [x] Confirm no-credentials localhost startup and health check (Node 22)
-- [ ] Check each unconfigured UI route for usable fallback states
-- [x] Verify the full public offline suite in GitHub Actions (1,447 tests)
+- [x] Present Settings onboarding instead of an empty AI workspace on the first start
+- [ ] Audit all optional integration screens for usable unconfigured states
+- [x] Verify the full public offline suite in GitHub Actions (1,450 tests)
 - [ ] Keep it green across releases and add end-to-end integration coverage
 - [ ] Finish removing host-specific assumptions and validate every optional integration
 - [x] Make the optional Etsy Hub path explicit and add public setup guides

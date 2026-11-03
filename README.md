@@ -90,6 +90,15 @@ The example uses port 3010. Open **http://127.0.0.1:3010** and log in using the 
 > [!NOTE]
 > Local single-process storage is included in the ignored data/ folder. No Redis signup is needed for the initial installation. You will still need your own approved Etsy API credentials to connect a shop, and a compatible AI key for AI features. Messages Bridge and autonomous social publishing are separate, optional integrations.
 
+<details>
+<summary><b>See the actual first-run Settings screen (no Etsy keys configured)</b></summary>
+
+![Screenshot of the real self-hosted Settings UI from a clean synthetic installation](docs/assets/standalone-first-run-settings.png)
+
+<sub>Captured in Chromium on GitHub Actions with generated local credentials and no real shop or customer data. Unlike the interactive demo above, this is a screenshot of the running application.</sub>
+
+</details>
+
 [Detailed quick start](docs/QUICKSTART.md) · [Etsy OAuth](docs/ETSY-OAUTH.md) · [Configuration](docs/CONFIGURATION.md) · [External integrations](docs/INTEGRATIONS.md)
 
 ## AI that keeps the seller in control
@@ -108,9 +117,10 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
 | Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
-| Hosted offline smoke | **79 selected tests passed** on Node 22 |
-| Full offline unit suite | **1,447 of 1,447 passed** on Node 22 |
-| Live/browser integration suite | **Not yet certified green** |
+| Hosted offline smoke | **82 selected tests passed** on Node 22 |
+| Full offline unit suite | **1,450 of 1,450 passed** on Node 22 |
+| First-run browser flow | **Passed in Chromium**: login, Settings, AI page |
+| Live Etsy/write integration suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |
 | Autonomous Social producer | Not bundled |

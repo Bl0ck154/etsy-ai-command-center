@@ -9,7 +9,7 @@ This document is the status of the **public source preview**, not a claim that t
 | Feature architecture | Manual UI, AI tools and social orchestration exist | Code present, not universal runtime validation |
 | Source syntax and privacy guard | Automated checks | CI gate |
 | Clean `npm ci` using Node 22 | GitHub Actions on Node 22 | Passed for Ubuntu; other platforms unverified |
-| Unit / offline tests | 1,447 tests passed in the full public offline suite on Node 22 (2026-11-03) | Offline verified; live/browser integration tests still pending |
+| Unit / offline tests | 1,450 tests passed in the full public offline suite on Node 22 (2026-11-03) | Offline verified; live/live Etsy and external service integrations are still pending |
 | Local startup without secrets | GitHub Actions Node 22, no Etsy tokens, `/healthz` | Passed for a basic boot check |
 | Etsy OAuth and live writes | Credentials and a permitted shop required | Not validated for outside users |
 | Customer messages | Requires a separately deployed Bridge | Not bundled |
@@ -21,7 +21,7 @@ This document is the status of the **public source preview**, not a claim that t
 - [x] Verify dependency installation on a clean Node.js 22 GitHub Actions host
 - [x] Verify the server boots on localhost with no live Etsy account and returns `/healthz` (Node 22)
 - [ ] Verify each unconfigured screen displays useful errors instead of failing
-- [x] Run and repair the public offline unit suite (1,447 passed on 2026-11-03)
+- [x] Run and repair the public offline unit suite (1,450 passed on 2026-11-03)
 - [ ] Verify standalone Etsy OAuth and manual editing using an approved shop
 - [ ] Replace remaining optional hardcoded host-specific paths with portable configuration
 - [x] Capture actual screenshots of a separate, synthetic interactive demo (not the live application); connected-app screenshots still needed
@@ -42,3 +42,9 @@ See [quick start](QUICKSTART.md), [integrations](INTEGRATIONS.md), [limitations]
 - Removed private deployment-only tests; the full public unit suite now passes on the hosted Node 22 runner.
 
 See [Testing](TESTING.md) for the scope of CI checks and [Maintainer sync](MAINTAINER-SYNC.md) for controlled updates from other installations.
+
+## Independent first-run acceptance (November 2026)
+
+The public source can now run from a clean installation using npm ci, npm run setup and npm start. The setup generates unique credentials. A single-process embedded Redis REST-compatible adapter stores local state under the ignored data/ directory. A hosted browser run confirms login, Settings onboarding and the AI workspace; HTTP smoke checks session and token-state status. This does not verify real Etsy OAuth or third-party AI access.
+
+Use remote Redis REST for multi-instance deployments, advanced workers or scripts not supported by the local adapter. The local JSON file is private application state and may contain OAuth refresh tokens.

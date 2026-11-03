@@ -15,8 +15,8 @@ The manual GitHub Actions workflow **Clean install and offline smoke** runs:
 
 - npm ci on Node.js 22 in a clean Ubuntu environment
 - source syntax and public hygiene checks
-- 79 selected offline regression tests (the set can change when tests are added or removed)
-- localhost boot with no Etsy credentials, followed by /healthz
+- 82 selected offline regression tests (the set can change when tests are added or removed)
+- first-run credential generation, localhost boot without Etsy credentials, login, session cookie verification, local KV ping and OAuth status
 
 Successful smoke checks confirm the base executable loads. They **do not prove** Etsy OAuth, all UI pages, write approvals or social publishing work in a new environment.
 
@@ -43,4 +43,10 @@ For a feature to be called production-ready, also verify it against an authorize
 
 ## Full-suite audit finding (3 November 2026)
 
-The first complete public offline run passed 1,444 tests, with three legacy-expectation failures. The failing checks assumed an old hardcoded model option or original prompt hashes from before public rebranding. The expected prompt contract is now generated from the sanitized public prompt source, preserving exact-hash checks. The follow-up audit passed all 1,447 tests on 3 November 2026. See https://github.com/Bl0ck154/etsy-ai-command-center/actions/runs/41631181949. Live Etsy authorization, browser integrations, and write workflows remain outside this offline result.
+The first complete public offline run passed 1,444 tests, with three legacy-expectation failures. The failing checks assumed an old hardcoded model option or original prompt hashes from before public rebranding. The expected prompt contract is now generated from the sanitized public prompt source, preserving exact-hash checks. The updated standalone-branch audit passed all 1,450 tests on 3 November 2026. See https://github.com/Bl0ck154/etsy-ai-command-center/actions/runs/41637474815. Live Etsy authorization, browser integrations, and write workflows remain outside this offline result.
+
+## First-run browser acceptance
+
+The Standalone browser acceptance workflow installs Chromium on a clean GitHub-hosted runner, generates a private .env, launches the real Node app, signs in using the generated password, verifies the actual Settings and AI pages, and captures screenshots. The workflow uses synthetic data only.
+
+It runs automatically for pull requests affecting public application files and can be launched manually. See the latest runs under GitHub Actions.
