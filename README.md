@@ -26,7 +26,7 @@
 </p>
 
 > [!IMPORTANT]
-> **Public preview (v0.1.x), not production-certified.** This is source from a self-hosted project adapted for public release. Clean installs, integrations and the full test suite are still being verified. **Review the [release-readiness report](docs/RELEASE-READINESS.md) and [limitations](docs/LIMITATIONS.md) before connecting a real shop.**
+> **Public preview (v0.1.x), not production-certified.** This is source from a self-hosted project adapted for public release. The offline unit suite passes on Node 22; external integrations and cross-platform deployment still need verification. **Review the [release-readiness report](docs/RELEASE-READINESS.md) and [limitations](docs/LIMITATIONS.md) before connecting a real shop.**
 
 ## Preview
 
@@ -110,8 +110,9 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
 | Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
-| Hosted offline smoke | **68 selected tests passed** on Node 22 |
-| Full unit and browser test suite | **Not yet certified green** |
+| Hosted offline smoke | **79 selected tests passed** on Node 22 |
+| Full offline unit suite | **1,447 of 1,447 passed** on Node 22 |
+| Live/browser integration suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |
 | Autonomous Social producer | Not bundled |

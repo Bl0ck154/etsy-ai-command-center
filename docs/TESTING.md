@@ -15,7 +15,7 @@ The manual GitHub Actions workflow **Clean install and offline smoke** runs:
 
 - npm ci on Node.js 22 in a clean Ubuntu environment
 - source syntax and public hygiene checks
-- 68 selected offline regression tests (the set can change when tests are added or removed)
+- 79 selected offline regression tests (the set can change when tests are added or removed)
 - localhost boot with no Etsy credentials, followed by /healthz
 
 Successful smoke checks confirm the base executable loads. They **do not prove** Etsy OAuth, all UI pages, write approvals or social publishing work in a new environment.
@@ -43,4 +43,4 @@ For a feature to be called production-ready, also verify it against an authorize
 
 ## Full-suite audit finding (3 November 2026)
 
-The first complete public offline run passed 1,444 tests, with three legacy-expectation failures. The failing checks assumed an old hardcoded model option or original prompt hashes from before public rebranding. The expected prompt contract is now generated from the sanitized public prompt source, preserving exact-hash checks. Run the full audit again before marking the gate green.
+The first complete public offline run passed 1,444 tests, with three legacy-expectation failures. The failing checks assumed an old hardcoded model option or original prompt hashes from before public rebranding. The expected prompt contract is now generated from the sanitized public prompt source, preserving exact-hash checks. The follow-up audit passed all 1,447 tests on 3 November 2026. See https://github.com/Bl0ck154/etsy-ai-command-center/actions/runs/41631181949. Live Etsy authorization, browser integrations, and write workflows remain outside this offline result.
