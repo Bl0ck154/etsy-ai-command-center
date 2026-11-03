@@ -1,0 +1,29 @@
+name: Clean install and offline smoke
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  dependency-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AUTOPUBLISH_ENABLED: "false"
+      REAL_PUBLISH_RELEASE_APPROVED: "false"
+      MESSAGE_TRIGGER_RUNNER_ENABLED: "false"
+      MESSAGE_AUTO_TRIGGERS_ENABLED: "false"
+      MESSAGE_TELEGRAM_NOTIFICATIONS_ENABLED: "false"
+      SOCIAL_AUTOPUBLISH_OWNER_OPT_IN: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Clean dependency install
+        run: npm ci --no-audit --no-fund
+      - name: Quick checks
+        run: npm run check
+      - name: Offline regression tests
+        run: npx playwright test --config=playwright.unit.config.js tests/auth-boundaries.unit.spec.js tests/agent-runtime-faults.unit.spec.js tests/agent-progress.unit.spec.js

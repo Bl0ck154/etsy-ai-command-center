@@ -1,101 +1,138 @@
-# Etsy AI Command Center
+<p align="center">
+  <img src="docs/assets/readme-hero.svg" alt="AI Command Center: self-hosted Etsy seller dashboard and AI copilot" width="100%">
+</p>
 
-[![Source checks](https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml/badge.svg)](https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml) ![MIT License](https://img.shields.io/badge/license-MIT-blue)
+<p align="center">
+  <a href="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml"><img alt="Source checks" src="https://github.com/Bl0ck154/etsy-ai-command-center/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/Bl0ck154/etsy-ai-command-center/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/Bl0ck154/etsy-ai-command-center?include_prereleases&label=release"></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-377d57"></a>
+  <a href="https://github.com/Bl0ck154/etsy-ai-command-center/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Bl0ck154/etsy-ai-command-center?style=flat"></a>
+  <img alt="Node.js 22+" src="https://img.shields.io/badge/Node.js-22%2B-43853d">
+</p>
 
-**Open-source Etsy shop management dashboard with an actionable AI assistant.**
+<p align="center">
+  <b>Manual Etsy shop management + an AI copilot that can prepare real work.</b><br>
+  Listings, orders, inventory, media, shop insights and approval-based AI workflows in one self-hosted dashboard.
+</p>
 
-Manage listings and shop operations in a web dashboard. Ask an AI assistant to inspect shop data, analyze listing images, and prepare changes for your approval. The project also contains optional customer-message and social-campaign workflows.
+<p align="center">
+  <a href="#preview">Preview</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#getting-started">Quick start</a> ·
+  <a href="#project-status">Project status</a> ·
+  <a href="docs/RELEASE-READINESS.md">Readiness report</a> ·
+  <a href="CONTRIBUTING.md">Contribute</a>
+</p>
 
-Built for self-hosting. You provide your own Etsy API credentials, AI providers, and infrastructure.
+> [!IMPORTANT]
+> **Public preview (v0.1.x), not production-certified.** This is source from a self-hosted project adapted for public release. Clean installs, integrations and the full test suite are still being verified. **Review the [release-readiness report](docs/RELEASE-READINESS.md) and [limitations](docs/LIMITATIONS.md) before connecting a real shop.**
 
-> Independent community project. Not affiliated with, endorsed by, or certified by Etsy, Inc. Etsy is a trademark of Etsy, Inc.
+## Preview
 
-## What you can do
+<p align="center"><img src="docs/assets/dashboard-preview.svg" alt="Illustrative dashboard with synthetic shop stats, listing performance and an AI context panel" width="100%"></p>
+<p align="center"><sub>Illustrative UI preview based on the application's design tokens and page structure. All data is synthetic. Not a live product screenshot.</sub></p>
 
-| Area | What is included | Notes |
+<details>
+<summary><b>See the AI approval workflow concept</b></summary>
+
+![AI assistant owner-review concept using synthetic listings](docs/assets/ai-approval-preview.svg)
+
+<sub>Concept illustration: specific AI actions depend on your provider, Etsy API access and configured workflow.</sub>
+
+</details>
+
+## Why this exists
+
+Sellers need conventional controls for everyday shop management and an AI assistant for tasks that benefit from analysis. Both belong in the same workspace.
+
+**AI Command Center** combines a manual Etsy shop dashboard with a tool-using assistant. The agent can inspect available shop context and listing images, then **prepare changes for owner approval**.
+
+A typical workflow:
+1. Check listings, orders or performance in the dashboard.
+2. Ask: *“Find listings with weak main images and suggest improvements.”*
+3. The AI retrieves relevant shop data and prepares proposed actions where supported.
+4. Review each change before using an available confirmation workflow.
+
+The workflow is an illustration, not a claim that all models or new installations can complete every step unattended.
+
+## Features
+
+| Area | Included source | Requirements |
 | --- | --- | --- |
-| Shop dashboard | Listings, inventory, orders, reviews, sales, analytics, settings | Requires your own authorized Etsy access for live data |
-| Listing workflows | View, edit, create drafts, bulk operations, media tools | Consequential operations have explicit application checks |
-| AI assistant | Tool-calling agent for reading shop context and preparing actions | Configurable provider; approvals required for supported consequential actions |
-| Image intelligence | Listing image analysis and image-set planning | Requires a compatible vision or image provider |
-| Customer messages | AI reply drafts, approval workflow, optional feedback-based learning | Requires a separate compatible Etsy Messages Bridge; not a standalone Etsy API feature |
-| Social operations | Campaign planning, media generation, visual review, queue and manual scheduling | The original autonomous producer is not part of this public release |
-| GPT Actions | Scoped OAuth, OpenAPI contracts and controlled Etsy operations | Optional advanced integration |
+| 📊 **Shop dashboard** | Listings, orders, inventory, reviews, sales, analytics and settings | Authorized Etsy API access |
+| 🛠️ **Manual management** | Create/edit drafts, media, bulk operations, inventory tools | Verify each write path before live use |
+| ✦ **Actionable AI copilot** | Tool calling, shop context, image analysis, proposed changes | Compatible AI model and credentials |
+| 🖼️ **Image intelligence** | Listing vision, image planning and media generation | Vision/image API provider |
+| 💬 **Messages** | Context-based drafts, owner approval, optional learning | Separate Etsy Messages Bridge, not bundled |
+| 📣 **Social campaigns** | AI campaign planning, media QA, approval and scheduling modules | Partial; autonomous producer not included |
+| 🔌 **GPT Actions** | Scoped OAuth, OpenAPI contracts and controlled Etsy operations | Optional advanced setup |
 
-The UI supports normal manual work. AI is optional and is not required to navigate the dashboard or use ordinary management controls.
+See [features](docs/FEATURES.md) and [integration requirements](docs/INTEGRATIONS.md).
 
-## Why this project exists
+## Getting started
 
-Most seller tools specialize in SEO, analytics, listing edits or AI copywriting. This project brings management controls and tool-using AI into one workspace. An assistant can inspect available shop context and propose concrete changes while the seller stays in control of important write operations.
-
-The code includes a multi-step social content pipeline: evidence gathering, opportunity selection, creative planning, media generation, quality review, owner review and publish-readiness checks. Its original production-specific autonomous worker was intentionally **not** released here; see `docs/LIMITATIONS.md` for the current boundary.
-
-## Quick start
-
-Requirements: Node.js 22+, npm, your own credentials for Etsy features, and (optionally) an AI provider.
+Requires **Node.js 22+** and npm. Live shop features also need credentials from your approved Etsy Open API v3 application. AI features need a compatible provider.
 
 ```bash
 git clone https://github.com/Bl0ck154/etsy-ai-command-center.git
 cd etsy-ai-command-center
 npm ci
 cp .env.example .env
-# Edit .env: replace the sample password and session secret, and add your own provider credentials.
+# Edit .env with your own session secret, password and any needed API credentials.
 npm start
 ```
 
-Open `http://localhost:3010`. For production, use HTTPS, proper secrets, and your own authenticated deployment.
+The example sets `PORT=3010`. Open **http://localhost:3010** after the server starts.
 
-The initial UI is not a hosted demo. Live Etsy operations require a properly configured Etsy Open API v3 application and OAuth authorization. Missing optional integrations will not become functional merely by starting the server.
+> [!NOTE]
+> This is a source installation, not a hosted Etsy app or ready-made OAuth integration. Messages Bridge, social providers and shared storage must be set up separately when needed. An accessible UI does not imply every integration is configured.
 
-See `docs/QUICKSTART.md` for setup details.
+[Detailed quick start](docs/QUICKSTART.md) · [External integrations](docs/INTEGRATIONS.md)
 
-## AI with guardrails
+## AI that keeps the seller in control
 
-The agent code defines tools for listing searches, image analysis, inventory, orders, shop statistics, approved edits, variation changes, draft preparation and more. Tool availability depends on the connected provider, configuration and the current workflow.
+- **Analyze:** access relevant shop records, listing information, sales and images using the agent's declared tools.
+- **Prepare:** create proposals for listing updates, media changes, variations and other supported actions.
+- **Approve:** consequential workflows require an explicit confirmation gate.
+- **Control:** automatic publishing and message triggers are disabled by default in the sample configuration.
 
-*AI proposals are not an authorization to publish or send.* Customer replies require manager approval; social publishing has separate release and owner gates. Production publishing is **off by default**.
+The source defines **47 tool-runtime contracts** across reading data, proposed changes, navigation and helper operations. This is an interface count, not 47 independently verified production features.
 
-## Repository map
+## Project status
 
-```text
-api/          Etsy API, AI agent, GPT Actions, messages, media and social modules
-public/       Browser-based dashboard
-workers/      Separate worker entry points (not enabled by this repository alone)
-tests/        Unit, contract and UI test source
-scripts/      General verification and configuration helpers
-docs/         Public setup and architecture documentation
-```
+| Verification | Status |
+| --- | --- |
+| Public-source privacy cleanup | Performed for initial snapshot |
+| Syntax checks | Automated |
+| Clean install / dependency compatibility | **Under verification** |
+| Full unit and browser test suite | **Not yet certified green** |
+| Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
+| Messages Bridge | Optional external service |
+| Autonomous Social producer | Not bundled |
+| Production readiness | **Not declared** |
 
-The server is a modularizing Node.js application with independent worker entry points. Some older internal identifiers still contain `etsy-manager-pro` for compatibility.
-
-## Documentation
-
-- `docs/QUICKSTART.md` — install and configure a local instance
-- `docs/FEATURES.md` — manual tools, AI tools and optional workflows
-- `docs/ARCHITECTURE.md` — major modules and runtime boundaries
-- `docs/INTEGRATIONS.md` — external services and provider requirements
-- `docs/LIMITATIONS.md` — incomplete features and usage cautions
-- `SECURITY.md` — secret handling and responsible disclosure
-- `CONTRIBUTING.md` — local changes and pull requests
+[Release-readiness audit](docs/RELEASE-READINESS.md) · [Known limitations](docs/LIMITATIONS.md) · [Roadmap](docs/ROADMAP.md)
 
 ## Development
 
 ```bash
-npm run check
-npm run test:unit
+npm run check            # quick syntax checks
+npm run verify:source    # full source syntax and public-snapshot safety checks
+npm run test:unit        # offline unit tests (requires installed dependencies)
 ```
 
-The basic `check` command is a syntax check, not an end-to-end verification. The full test suite may require additional test fixtures, browser dependencies and configured integration environments.
+Code is split across `api/` (backend and orchestration), `public/` (web UI), `workers/` (optional processes), `tests/` and `docs/`.
 
-## Security and privacy
+## Contribute and support
 
-- Never commit `.env`, customer conversations, session tokens, production snapshots, databases or log files.
-- Use test accounts or synthetic data in issues and screenshots.
-- Keep social publishing and message automation disabled until you have verified every dependency and all required permissions.
-- Review Etsy API and platform terms before enabling any data collection, browser integrations or automated actions.
+Bug reports and focused pull requests are welcome. Please use **synthetic listings, redacted screenshots and no customer data** in issues. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
-## License
+If you find the project useful, a GitHub star helps other Etsy sellers discover it. ⭐
 
-MIT. See `LICENSE`. Contributions are welcome.
+## License and attribution
 
-This is a new public source snapshot with fresh history, not a public copy of the original private Git commit graph.
+[MIT License](LICENSE).
+
+**The term 'Etsy' is a trademark of Etsy, Inc. This Application uses Etsy's API, but is not endorsed or certified by Etsy.**
+
+Etsy API access, browser automation, use of Etsy data with AI and apps used by multiple sellers are subject to Etsy's current requirements and permissions. This project provides no credentials or authorization to bypass those rules.

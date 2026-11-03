@@ -23,7 +23,9 @@
     "test:ui": "playwright test --headed",
     "test:report": "playwright show-report",
     "test:unit:full": "playwright test --config=playwright.unit.config.js",
-    "check": "node --check server.js && node --check api/agent.js && node --check api/social.js && node --check public/app.js"
+    "check": "node --check server.js && node --check api/agent.js && node --check api/social.js && node --check public/app.js",
+    "verify:source": "node scripts/verify-runtime-syntax.mjs && node scripts/verify-public-release.mjs",
+    "check:public": "node scripts/verify-public-release.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2"
