@@ -9,7 +9,7 @@ This document is the status of the **public source preview**, not a claim that t
 | Feature architecture | Manual UI, AI tools and social orchestration exist | Code present, not universal runtime validation |
 | Source syntax and privacy guard | Automated checks | CI gate |
 | Clean `npm ci` using Node 22 | Hosted CI compatibility gate | Under verification |
-| Unit / offline tests | Suites included in `tests/` | Verify and repair suite before relying on them |
+| Unit / offline tests | Public smoke subset has 16 tests; full suite still unverified | Partial coverage only |
 | Local startup without secrets | Fresh environment | Not independently proven yet |
 | Etsy OAuth and live writes | Credentials and a permitted shop required | Not validated for outside users |
 | Customer messages | Requires a separately deployed Bridge | Not bundled |

@@ -4,9 +4,11 @@ import path from 'path';
 import { TOOLS } from '../api/agent/tools-schema.js';
 import { agentProgressElapsedMs, formatAgentDuration, formatAgentProgress } from '../public/utils/agent-progress.js';
 
-test('VPS deploy bundle includes the agent progress module', () => {
-  const deployScript = fs.readFileSync(path.join(process.cwd(), 'scripts/deploy-vps-staging.sh'), 'utf8');
-  expect(deployScript).toContain('  public/utils/agent-progress.js');
+test('public source includes and imports the shared agent progress module', () => {
+  const progressPath = path.join(process.cwd(), 'public/utils/agent-progress.js');
+  expect(fs.existsSync(progressPath)).toBe(true);
+  const agentSource = fs.readFileSync(path.join(process.cwd(), 'public/pages/agent.js'), 'utf8');
+  expect(agentSource).toContain("from '../utils/agent-progress.js'");
 });
 
 test('mini agent uses the shared full agent renderer instead of a second send pipeline', () => {
