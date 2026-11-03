@@ -16,12 +16,12 @@ This repository provides source code for a self-hosted application. It does not 
 git clone https://github.com/Bl0ck154/etsy-ai-command-center.git
 cd etsy-ai-command-center
 npm ci
-cp .env.example .env
+npm run setup
 ```
 
-Edit `.env`. Set a unique, long `SITE_PASSWORD` and a freshly generated random `SESSION_SECRET`. Do not reuse the placeholders from `.env.example`.
+The setup command creates private .env credentials, prints your randomly generated login password once and refuses to overwrite an existing file.
 
-Before choosing Connect Etsy, configure the required Redis REST token store: KV_REST_API_URL and KV_REST_API_TOKEN. Then set your own ETSY_API_KEY, ETSY_CLIENT_SECRET and ETSY_SHOP_ID. Read [Etsy OAuth](ETSY-OAUTH.md) for approved app access, callback matching and PKCE.
+The built-in local KV store saves OAuth state under the ignored data/ directory. To connect a real Etsy shop, configure your own approved ETSY_API_KEY, ETSY_CLIENT_SECRET and ETSY_SHOP_ID. Read [Etsy OAuth](ETSY-OAUTH.md) for PKCE and callback setup.
 
 AI is optional. Configure Gemini, Claude or an explicitly compatible external model when needed. Tool calling, vision and image generation are distinct capabilities; read [AI providers](AI-PROVIDERS.md). The external Etsy API Hub is off by default.
 
@@ -33,7 +33,7 @@ npm run check
 npm start
 ```
 
-Open `http://localhost:3010`.
+Open http://127.0.0.1:3010 and log in with the generated password.
 
 If the application reports missing configuration, supply the corresponding credentials for the feature you want to use. Do not copy credentials from another installation.
 
@@ -59,3 +59,5 @@ Some advanced pages depend on separately deployed infrastructure such as a share
 - [Configuration reference](CONFIGURATION.md)
 - [Deployment, backup and upgrades](DEPLOYMENT.md)
 - [Release readiness](RELEASE-READINESS.md)
+
+The embedded KV adapter supports one application process. Back up its private data file securely. For multi-instance deployment use KV_BACKEND=redis and your own compatible Redis REST endpoint.

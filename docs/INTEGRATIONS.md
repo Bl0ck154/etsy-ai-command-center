@@ -1,6 +1,6 @@
 # Integrations
 
-All integrations are supplied by the operator. This repository does not ship real tokens or a hosted backend.
+External integrations require your own credentials. A single-process local KV store is included; remote Redis REST is optional for shared hosting.
 
 | Integration | Used for | Requirement |
 | --- | --- | --- |

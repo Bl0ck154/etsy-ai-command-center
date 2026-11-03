@@ -50,8 +50,15 @@ export async function renderSettings(container) {
     <div class="page-header">
       <div>
         <div class="page-title">Settings</div>
-        <div class="page-subtitle">Credentials, AI, integrations, shop context</div>
+        <div class="page-subtitle">Configure your shop, AI providers and optional integrations</div>
       </div>
+    </div>
+    <div class="alert alert-info" style="margin:0 24px 16px;line-height:1.6;display:block;font-size:13px">
+      <strong>New installation?</strong> Start with the generated login credentials from <code>npm run setup</code>.
+      Add your own Etsy API key, shared secret and shop ID in the server <code>.env</code>, restart the app,
+      then click <strong>Connect Etsy</strong> below. You can also configure an AI provider on the next tab.
+      Local data storage is already included; no Redis account is needed for one app instance.
+      <a href="https://github.com/Bl0ck154/etsy-ai-command-center/blob/main/docs/QUICKSTART.md" target="_blank" rel="noopener noreferrer">Setup guide</a>.
     </div>
     <div class="page-body settings-layout">
       <div class="card" style="padding:8px;position:sticky;top:20px">
@@ -89,20 +96,20 @@ function renderEtsyTab() {
   return `
     <div class="card mb-12">
       <div class="settings-group-title">Etsy API credentials</div>
-      <div class="alert alert-info mb-12" style="font-size:12px">
+      <div class="alert alert-info mb-12" style="font-size:12px;display:block;line-height:1.6">
         Set your own credentials in the <strong>server environment</strong> (typically a private <code>.env</code> file).
         Restart the application after changing environment variables. Etsy OAuth also needs persistent KV storage.
       </div>
       <div class="field"><label>API Key (keystring)</label>
         <input type="text" id="s-apikey" placeholder="ETSY_API_KEY"></div>
       <div class="field"><label>Access Token</label>
-        <div class="row"><input type="text" id="s-token" placeholder="ETSY_ACCESS_TOKEN" style="flex:1">
+        <div class="row"><input type="password" id="s-token" placeholder="ETSY_ACCESS_TOKEN" style="flex:1">
           <span class="token-timer" id="token-timer">—</span></div>
       </div>
       <div class="field"><label>Refresh Token</label>
-        <input type="text" id="s-refresh" placeholder="ETSY_REFRESH_TOKEN"></div>
+        <input type="password" id="s-refresh" placeholder="ETSY_REFRESH_TOKEN"></div>
       <div class="field"><label>Client Secret <span class="badge badge-orange" style="font-size:9px">Required Feb 2026+</span></label>
-        <input type="text" id="s-secret" placeholder="ETSY_CLIENT_SECRET"></div>
+        <input type="password" id="s-secret" placeholder="ETSY_CLIENT_SECRET"></div>
       <div class="field"><label>Shop ID</label>
         <input type="text" id="s-shopid" placeholder="12345678" style="width:160px"></div>
       <div class="row" style="gap:8px;flex-wrap:wrap">
@@ -1974,6 +1981,11 @@ async function checkTokenStatus() {
     const el = document.getElementById('token-timer');
     if (!el) return;
     const secs = status.expires_in_seconds || 0;
+    if (!status.valid) {
+      el.className = 'token-timer expired';
+      el.textContent = status.last_error ? 'Token issue: ' + status.last_error : 'Not connected';
+      return;
+    }
     el.className = secs > 300 ? 'token-timer' : secs > 0 ? 'token-timer expiring' : 'token-timer expired';
     el.textContent = status.last_error ? `Token issue: ${status.last_error}` : secs > 0 ? `Expires in ${Math.floor(secs / 60)}m ${secs % 60}s` : 'Expired';
     if (secs > 0) setTimeout(checkTokenStatus, 30000);

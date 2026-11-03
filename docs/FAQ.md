@@ -35,3 +35,7 @@ Not yet. Clean dependency installation and a basic no-credentials startup on Nod
 ## Why does some source code still contain older technical identifiers?
 
 Some configuration keys and internal names were retained for compatibility with the source's original modules. They do not refer to the original private Git history or include deployed credentials.
+
+## Do I need a database subscription?
+
+No for a single-process installation. The setup command enables a built-in KV store in the ignored data directory. For multi-instance deployments or advanced workers, configure a compatible external Redis REST service. Back up the local file securely because it can contain OAuth refresh tokens.

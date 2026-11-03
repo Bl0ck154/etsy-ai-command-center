@@ -90,7 +90,7 @@ if ((process.env.NODE_ENV === 'production' || !isLocalHostBind) && authConfigSta
   process.exit(1);
 }
 
-// VPS-native safety default: scheduled publishing is disabled. Even if an old
+// Safe self-hosted default: scheduled publishing is disabled. Even if an old
 // systemd override or .env value says AUTOPUBLISH=true, real publishing remains
 // off unless a separate owner-approved release flag is set intentionally.
 const realPublishReleaseApproved = process.env.REAL_PUBLISH_RELEASE_APPROVED === 'true';
@@ -372,8 +372,8 @@ app.get('/gpt/privacy', (req, res) => {
 app.get('/healthz', (req, res) => {
   res.json({
     ok: true,
-    service: 'etsy-manager-pro',
-    runtime: 'vps-node',
+    service: 'etsy-ai-command-center',
+    runtime: 'node',
     autopublish_enabled: process.env.AUTOPUBLISH_ENABLED === 'true',
     autopublish: process.env.AUTOPUBLISH === 'true',
   });
@@ -414,6 +414,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`[server] etsy-manager-pro listening on http://${HOST}:${PORT}`);
+  console.log(`[server] Etsy AI Command Center listening on http://${HOST}:${PORT}`);
   console.log(`[server] AUTOPUBLISH_ENABLED=${process.env.AUTOPUBLISH_ENABLED}`);
 });

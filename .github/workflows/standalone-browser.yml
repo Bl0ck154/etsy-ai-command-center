@@ -1,0 +1,57 @@
+name: Standalone browser acceptance
+
+on:
+  pull_request:
+    paths:
+      - "server.js"
+      - "api/**"
+      - "public/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".env.example"
+      - ".github/workflows/standalone-browser.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Create synthetic local installation
+        run: npm run setup > /tmp/etsy-browser-setup.log
+      - name: Open real browser and test initial experience
+        run: |
+          PORT=3010 HOST=127.0.0.1 npm start > /tmp/etsy-browser-app.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3010/healthz > /dev/null 2>&1; then
+              node scripts/check-standalone-browser.mjs
+              exit 0
+            fi
+            if ! kill -0 "$pid" 2>/dev/null; then
+              tail -n 50 /tmp/etsy-browser-app.log
+              exit 1
+            fi
+            sleep 1
+          done
+          tail -n 50 /tmp/etsy-browser-app.log
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: standalone-screenshots
+          path: artifacts/*.png
+          if-no-files-found: ignore
+          retention-days: 3

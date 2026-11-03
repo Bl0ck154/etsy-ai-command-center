@@ -184,7 +184,7 @@ window.navigate = async function (pageId, params = {}) {
   if (pageId === 'agent') window.closeAgentFloat?.();
 
   const main = document.getElementById('main-area');
-  main.innerHTML = '';
+  main.innerHTML = '<div class="page-body"><div class="alert alert-info" style="margin:36px auto;max-width:620px">Loading ' + escHtml(PAGES[pageId].label) + '...</div></div>';
   main.style.cssText = ''; // reset any styles set by previous page (e.g. agent sets overflow:hidden)
   try {
     const render = PAGES[pageId].render || await loadPageRenderer(pageId);
@@ -246,7 +246,7 @@ function showLoginScreen(requiresUsername = true) {
       <div class="card" style="padding:36px 32px">
         <div style="text-align:center;margin-bottom:28px">
           <div style="width:44px;height:44px;background:var(--orange);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;margin-bottom:14px">E</div>
-          <div style="font-size:18px;font-weight:700;color:var(--text)">EM - Shop Manager Pro</div>
+          <div style="font-size:18px;font-weight:700;color:var(--text)">Etsy AI Command Center</div>
           <div style="font-size:13px;color:var(--text-2);margin-top:3px">Sign in to continue</div>
         </div>
         <form id="login-form" onsubmit="window.__submitLogin(event)" style="display:flex;flex-direction:column;gap:10px">
@@ -261,10 +261,15 @@ function showLoginScreen(requiresUsername = true) {
         </form>
       </div>
     </div>`;
+  const usernameField = document.getElementById('login-username');
+  if (usernameField) usernameField.style.display = requiresUsername ? 'block' : 'none';
   setTimeout(() => document.getElementById(requiresUsername ? 'login-username' : 'login-password')?.focus(), 50);
 }
 
-window.__showLoginScreen = () => showLoginScreen(true);
+window.__showLoginScreen = async () => {
+  const config = await checkAuth();
+  showLoginScreen(config.requires_username !== false);
+};
 
 window.__submitLogin = async (e) => {
   e.preventDefault();
@@ -326,7 +331,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     <nav class="sidebar" id="sidebar">${buildSidebar()}</nav>
     <div class="app-workspace">
       ${buildTopbar()}
-      <main class="main-area" id="main-area"></main>
+      <main class="main-area" id="main-area"><div class="page-body"><div class="alert alert-info" style="margin:36px auto;max-width:620px">Preparing your workspace...</div></div></main>
     </div>`;
 
   // External Etsy/CDN media can be unavailable in privacy-restricted browsers.
@@ -567,6 +572,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Accept legacy direct links such as /schedule?preview_id=..., then normalize
   // them once so later navigation cannot retain that page's object ID.
   const initialRoute = currentRoute();
+  // A fresh install has no Etsy shop yet: start with setup instructions instead of an empty AI screen.
+  if (!initialShop && !window.location.hash && window.location.pathname === '/') {
+    initialRoute.page = 'settings';
+    initialRoute.params = {};
+  }
   writeRoute(initialRoute.page, initialRoute.params, { replace: true });
   await origNavigate(initialRoute.page, initialRoute.params);
 });

@@ -9,7 +9,7 @@ Verified: Node.js 22 on a GitHub-hosted Ubuntu runner with clean npm ci, selecte
     git clone https://github.com/Bl0ck154/etsy-ai-command-center.git
     cd etsy-ai-command-center
     npm ci
-    cp .env.example .env
+    npm run setup
     npm run doctor
     npm start
 
@@ -20,7 +20,7 @@ Edit .env before activating real services. The application binds to localhost by
 - Use a dedicated non-root application identity and HTTPS reverse proxy.
 - Configure a unique SESSION_SECRET and secure authentication; never expose the sample password.
 - Configure exact CORS/origin values and safe reverse-proxy forwarding.
-- Choose persistent storage: an Upstash-compatible Redis REST backend is used by Etsy OAuth token state. Other optional features may have additional state.
+- Choose persistent storage: the single-process embedded data/embedded-kv.json store works by default; remote Redis REST is an option for shared hosting. Other optional features may have additional state.
 - Keep all automatic messaging and publishing switches disabled until individually tested with required permissions.
 - Set up backups, restarts, monitoring, storage permissions and incident recovery for your own infrastructure.
 
@@ -31,3 +31,5 @@ Backing up Git alone **does not** back up the working app. Identify every enable
 For upgrades, pin a source release, review changes to settings and persistent data, and test on a separate instance. Roll back both code and compatible data version together. The original private project's deployment scripts were deliberately excluded; they are not a supported public deployment method.
 
 See [Configuration](CONFIGURATION.md), [Etsy OAuth](ETSY-OAUTH.md), [Integrations](INTEGRATIONS.md) and [Readiness](RELEASE-READINESS.md).
+
+The local KV store is intentionally single-process and does not support arbitrary Redis Lua scripts needed by some optional workers. Keep it private; do not run multiple independent app processes with the same data file. For multi-instance deployment use a compatible Redis REST provider.

@@ -81,16 +81,23 @@ Requires **Node.js 22+** and npm. Live shop features also need credentials from 
 git clone https://github.com/Bl0ck154/etsy-ai-command-center.git
 cd etsy-ai-command-center
 npm ci
-cp .env.example .env
-# Edit .env with your own credentials and unique session secret.
-npm run doctor
-npm start
+npm run setup       # generate local credentials and private .env
+npm start           # starts the app with embedded KV
 ```
 
-The example sets `PORT=3010`. Open **http://localhost:3010** after the server starts.
+The example uses port 3010. Open **http://127.0.0.1:3010** and log in using the password printed by the setup command. It is shown only once.
 
 > [!NOTE]
-> This is a source installation, not a hosted Etsy app or ready-made OAuth integration. Messages Bridge, social providers and shared storage must be set up separately when needed. An accessible UI does not imply every integration is configured.
+> Local single-process storage is included in the ignored data/ folder. No Redis signup is needed for the initial installation. You will still need your own approved Etsy API credentials to connect a shop, and a compatible AI key for AI features. Messages Bridge and autonomous social publishing are separate, optional integrations.
+
+<details>
+<summary><b>See the actual first-run Settings screen (no Etsy keys configured)</b></summary>
+
+![Screenshot of the real self-hosted Settings UI from a clean synthetic installation](docs/assets/standalone-first-run-settings.png)
+
+<sub>Captured in Chromium on GitHub Actions with generated local credentials and no real shop or customer data. Unlike the interactive demo above, this is a screenshot of the running application.</sub>
+
+</details>
 
 [Detailed quick start](docs/QUICKSTART.md) · [Etsy OAuth](docs/ETSY-OAUTH.md) · [Configuration](docs/CONFIGURATION.md) · [External integrations](docs/INTEGRATIONS.md)
 
@@ -110,9 +117,10 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 | Public-source privacy cleanup | Performed for initial snapshot |
 | Syntax checks | Automated |
 | Node 22 clean install + localhost health | **Passed on GitHub Actions**; other environments untested |
-| Hosted offline smoke | **79 selected tests passed** on Node 22 |
-| Full offline unit suite | **1,447 of 1,447 passed** on Node 22 |
-| Live/browser integration suite | **Not yet certified green** |
+| Hosted offline smoke | **82 selected tests passed** on Node 22 |
+| Full offline unit suite | **1,450 of 1,450 passed** on Node 22 |
+| First-run browser flow | **Passed in Chromium**: login, Settings, AI page |
+| Live Etsy/write integration suite | **Not yet certified green** |
 | Other sellers' Etsy OAuth and live write workflows | **Not independently validated** |
 | Messages Bridge | Optional external service |
 | Autonomous Social producer | Not bundled |
@@ -123,6 +131,7 @@ The source defines **47 tool-runtime contracts** across reading data, proposed c
 ## Development
 
 ```bash
+npm run setup            # one-time local configuration
 npm run doctor           # redacted configuration preflight
 npm run check            # quick syntax checks
 npm run verify:source    # full source syntax and public-snapshot safety checks
