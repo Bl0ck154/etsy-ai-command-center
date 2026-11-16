@@ -38,7 +38,7 @@
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.2",
-    "express-rate-limit": "^8.5.2",
+    "express-rate-limit": "^8.7.2",
     "helmet": "^8.2.0",
     "isolated-vm": "^6.1.2",
     "metaai-cookie-client": "git+https://github.com/Bl0ck154/metaai-cookie-client.git#af2454f0038a069b973f7fa5579a409bc5bf5530",
