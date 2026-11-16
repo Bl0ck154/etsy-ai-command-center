@@ -43,7 +43,7 @@
     "isolated-vm": "^6.1.2",
     "metaai-cookie-client": "git+https://github.com/Bl0ck154/metaai-cookie-client.git#af2454f0038a069b973f7fa5579a409bc5bf5530",
     "playwright": "1.58.2",
-    "sharp": "^0.34.5"
+    "sharp": "^0.35.5"
   },
   "private": true,
   "license": "MIT",
